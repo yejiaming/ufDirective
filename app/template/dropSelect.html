@@ -1,0 +1,25 @@
+<div class="dropdown">
+    <button type="button" class="btn dropdown-toggle res-dropdown-toggle" id="dropdownMenu1" ng-click="display=!display"
+            data-toggle="dropdown">
+        <span class="caret" ></span>配置类型
+
+    </button>
+    <ul class="dropdown-mymenu pull-right" role="menu" ng-show="display"
+        aria-labelledby="dropdownMenu1" style=" padding-left: 45px;">
+        <li role="presentation">
+            <a role="menuitem" ng-click="warpCallback('itemClicked','0',$event)">机构公共</a>
+        </li>
+        <li role="presentation">
+            <a role="menuitem"  ng-click="warpCallback('itemClicked', '1')">客户系统</a>
+        </li>
+        <li role="presentation">
+            <a role="menuitem"  ng-click="warpCallback('itemClicked', '2')">资金系统</a>
+        </li>
+        <li role="presentation">
+            <a role="menuitem"  ng-click="warpCallback('itemClicked', '3')">证券</a>
+        </li>
+        <li role="presentation">
+            <a role="menuitem"  ng-click="warpCallback('itemClicked', '8')">日终管理</a>
+        </li>
+    </ul>
+</div>

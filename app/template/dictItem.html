@@ -1,0 +1,6 @@
+<i ng-click="warpCallback('itemClicked', item, $event);" class="{{getItemIcon(item)}}" style="font-size: 12px !important;" ></i>
+<span class='text-field' ng-click="warpCallback('itemClicked', item, $event);">{{item[textField]}}</span>
+<span ng-if="item[dictEntry]" class='text-field' ng-click="warpCallback('entryClicked', item, $event);">{{item[dictEntry] +'-'}}{{item[entryName]}}</span>
+<ul ng-show="item.$isExpend" style="list-style: none;padding-left: 23px;cursor: pointer">
+    <li  ng-repeat="item in item.children" ng-include="itemTemplateUrl || 'template/dictItem.html'"></li>
+</ul>

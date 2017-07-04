@@ -1,0 +1,385 @@
+<div ng-controller="rolesSetCtrl" class="bgContainer page-roles">
+    <div class="row">
+        <!--<div class="top-line"></div>-->
+        <div class="panel-body border-reset">
+            <form role="form" class="form-horizontal roles-top">
+                <div class="form-group roles-margin firstline">
+                    <label class="col-sm-1 control-label res-control-label text-dis" ng-hide="false">机构编码：</label>
+                    <div class="col-sm-3" ng-hide="false">
+                        <!--<input type="number" min="0" class="form-control input-sm" placeholder="请输入..."-->
+                        <!--ng-model="bll.roleGetParams.role_kind">-->
+                        <select class="form-control input-sm" ng-model="bll.roleGetParamsTemp.branchNo"
+                                ng-options="o.branchNo as (o.branchNo+'&nbsp;&nbsp;&nbsp;&nbsp;'+o.branchName) for o in bll.dataMulList"
+                                ng-disabled="ui.isMod">
+                            <option value="">--请选择--</option>
+                        </select>
+                    </div>
+                    <label class="col-sm-1 control-label res-control-label text-dis">角色编号：</label>
+                    <div class="col-sm-3">
+                        <input type="number" min="0" class="form-control input-sm" placeholder="请输入..."
+                               ng-model="bll.roleGetParams.roleId">
+                    </div>
+                    <label class="col-sm-1 control-label res-control-label text-dis" ng-hide="false">角色名称：</label>
+                    <div class="col-sm-3" ng-hide="false">
+                        <input type="text" min="0" class="form-control input-sm" placeholder="请输入..."
+                               ng-model="bll.roleGetParams.roleName">
+                    </div>
+                </div>
+                <div class="form-group roles-margin secondline">
+                    <label class="col-sm-1 control-label res-control-label text-dis" ng-hide="false">角色类别：</label>
+                    <div class="col-sm-3">
+                        <select class="form-control input-sm" ng-model="bll.roleGetParams.roleType"
+                                ng-options="o.code as (o.code+'&nbsp;&nbsp;&nbsp;&nbsp;'+o.value) for o in bll.dicts.roleType"
+                                ng-disabled="ui.isMod">
+                            <option value="">--请选择--</option>
+                        </select>
+                    </div>
+                    <!--<div class="col-sm-3" ng-hide="false">-->
+                    <!--<input type="number" min="0" class="form-control input-sm" placeholder="请输入..."-->
+                    <!--ng-model="bll.roleGetParams.branchNo">-->
+                    <!--</div>-->
+                    <div class="pull-right">
+                        <a type="submit" ng-click="rolesQry()" class="query-button pull-right">查 询</a>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="row role-set-div role-set-deal">
+            <div class="col-sm-12">
+                <div class="form-title role-set-head">
+                    <span class="pull-left form-header-left"></span><span
+                        class="pull-left form-header-right">角色列表</span>  <span class="role-record-count">总记录数：</span><span ng-bind="pagination.total_items"></span>
+                    <a type="submit" ng-click="ui.modal.open_add('角色新增')" class="add-button pull-right" button-rights="21">新
+                        增</a>
+                </div>
+                <table class="table table-margin">
+                    <tr class="table-header">
+                        <th width="80px">序号</th>
+                        <th>机构名称</th>
+                        <th>角色编号</th>
+                        <th>角色类型</th>
+                        <th>角色名称</th>
+                        <th>操作</th>
+                    </tr>
+                    <!--ng-dblclick="ui.modal.open_mod($index)"-->
+                    <tr class="hover-change" ng-repeat="x in bll.rolesSet"
+                        change-tr-style id="tr{{$index}}">
+                        <td ng-cloak>{{(ui.pagination.page_size*(ui.pagination.page_no-1))+ $index+1}}</td>
+                        <td ng-cloak>{{ x.branchNo }}</td>
+                        <td ng-cloak>{{ x.roleId }}</td>
+                        <td ng-cloak hs-format-dict="{{ x.roleType }}"
+                            dict-entry="{{ bll.dicts.roleType }}"></td>
+                        <td ng-cloak>{{ x.roleName}}</td>
+                        <td ng-cloak class="role-operate" style="padding-left: 2%;">
+                            <a type="button"
+                               ng-click="ui.modal.open_grunt_right($index,'角色授权')" button-rights="24" title="授权">
+                                <span class="iconfont icon-yaochi table-icon fuquan-bgcolor"></span>
+                            </a>
+                            <a type="button"
+                               ng-click="ui.modal.open_right($index,'角色修改')" button-rights="22" title="修改">
+                                <span class="iconfont table-icon update-bgcolor icon-bianji"></span>
+                            </a>
+                            <a type="button"
+                               ng-click="ui.modal.open_cut($index,'角色删除')"  button-rights="23" title="删除">
+                                        <span class="iconfont icon-lajitong-copy table-icon del-bgcolor role-delete"></span>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+                <small ng-if="!bll.rolesSet.length>0">暂无数据</small>
+                <div class="text-right">
+                    <uib-pagination total-items="pagination.total_items" previous-text="上一页"
+                                    items-per-page="bll.roleGetParams.pageSize" next-text="下一页"
+                                    ng-model="bll.roleGetParams.pageNo" max-size="5"
+                                    class="pagination-sm"
+                                    ng-change="pagination.pageChange()"
+                                    boundary-link-numbers="true" rotate="false"></uib-pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--调整-->
+<!--<div class="page page-roles">-->
+    <!--<div class="model-head">-->
+        <!--<form role="form" class="form-horizontal roles-top">-->
+            <!--<div class="dl-firstline">-->
+                <!--<label class="col-sm-1 control-label res-control-label text-dis" ng-hide="false">机构编码：</label>-->
+                <!--<div class="col-sm-3" ng-hide="false">-->
+                    <!--&lt;!&ndash;<input type="number" min="0" class="form-control input-sm" placeholder="请输入..."&ndash;&gt;-->
+                    <!--&lt;!&ndash;ng-model="bll.roleGetParams.role_kind">&ndash;&gt;-->
+                    <!--<select class="form-control input-sm" ng-model="bll.roleGetParamsTemp.branchNo"-->
+                            <!--ng-options="o.branchNo as (o.branchNo+'&nbsp;&nbsp;&nbsp;&nbsp;'+o.branchName) for o in bll.dataMulList"-->
+                            <!--ng-disabled="ui.isMod">-->
+                        <!--<option value="">--请选择--</option>-->
+                    <!--</select>-->
+                <!--</div>-->
+                <!--<label class="col-sm-1 control-label res-control-label text-dis">角色编号：</label>-->
+                <!--<div class="col-sm-3">-->
+                    <!--<input type="number" min="0" class="form-control input-sm" placeholder="请输入..."-->
+                           <!--ng-model="bll.roleGetParams.roleId">-->
+                <!--</div>-->
+                <!--<label class="col-sm-1 control-label res-control-label text-dis" ng-hide="false">角色名称：</label>-->
+                <!--<div class="col-sm-3" ng-hide="false">-->
+                    <!--<input type="text" min="0" class="form-control input-sm" placeholder="请输入..."-->
+                           <!--ng-model="bll.roleGetParams.roleName">-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="dl-secondline">-->
+                <!--<label class="col-sm-1 control-label res-control-label text-dis" ng-hide="false">角色类别：</label>-->
+                <!--<div class="col-sm-3">-->
+                    <!--<select class="form-control input-sm" ng-model="bll.roleGetParams.roleType"-->
+                            <!--ng-options="o.code as (o.code+'&nbsp;&nbsp;&nbsp;&nbsp;'+o.value) for o in bll.dicts.roleType"-->
+                            <!--ng-disabled="ui.isMod">-->
+                        <!--<option value="">--请选择--</option>-->
+                    <!--</select>-->
+                <!--</div>-->
+                <!--&lt;!&ndash;<div class="col-sm-3" ng-hide="false">&ndash;&gt;-->
+                <!--&lt;!&ndash;<input type="number" min="0" class="form-control input-sm" placeholder="请输入..."&ndash;&gt;-->
+                <!--&lt;!&ndash;ng-model="bll.roleGetParams.branchNo">&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                <!--<div class="col-sm-8 pull-right">-->
+                    <!--<a type="submit" ng-click="rolesQry()" class="query-button pull-right">查 询</a>-->
+
+                <!--</div>-->
+            <!--</div>-->
+        <!--</form>-->
+        <!--<form role="form" class="form-horizontal roles-top">-->
+            <!--<div class="form-group roles-margin">-->
+                <!--<label class="col-sm-1 control-label res-control-label text-dis" ng-hide="false">机构编码：</label>-->
+                <!--<div class="col-sm-3" ng-hide="false">-->
+                    <!--&lt;!&ndash;<input type="number" min="0" class="form-control input-sm" placeholder="请输入..."&ndash;&gt;-->
+                    <!--&lt;!&ndash;ng-model="bll.roleGetParams.role_kind">&ndash;&gt;-->
+                    <!--<select class="form-control input-sm" ng-model="bll.roleGetParamsTemp.branchNo"-->
+                            <!--ng-options="o.branchNo as (o.branchNo+'&nbsp;&nbsp;&nbsp;&nbsp;'+o.branchName) for o in bll.dataMulList"-->
+                            <!--ng-disabled="ui.isMod">-->
+                        <!--<option value="">--请选择--</option>-->
+                    <!--</select>-->
+                <!--</div>-->
+                <!--<label class="col-sm-1 control-label res-control-label text-dis">角色编号：</label>-->
+                <!--<div class="col-sm-3">-->
+                    <!--<input type="number" min="0" class="form-control input-sm" placeholder="请输入..."-->
+                           <!--ng-model="bll.roleGetParams.roleId">-->
+                <!--</div>-->
+                <!--<label class="col-sm-1 control-label res-control-label text-dis" ng-hide="false">角色名称：</label>-->
+                <!--<div class="col-sm-3" ng-hide="false">-->
+                    <!--<input type="text" min="0" class="form-control input-sm" placeholder="请输入..."-->
+                           <!--ng-model="bll.roleGetParams.roleName">-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group roles-margin">-->
+                <!--<label class="col-sm-1 control-label res-control-label text-dis" ng-hide="false">角色类别：</label>-->
+                <!--<div class="col-sm-3">-->
+                    <!--<select class="form-control input-sm" ng-model="bll.roleGetParams.roleType"-->
+                            <!--ng-options="o.code as (o.code+'&nbsp;&nbsp;&nbsp;&nbsp;'+o.value) for o in bll.dicts.roleType"-->
+                            <!--ng-disabled="ui.isMod">-->
+                        <!--<option value="">--请选择--</option>-->
+                    <!--</select>-->
+                <!--</div>-->
+                <!--&lt;!&ndash;<div class="col-sm-3" ng-hide="false">&ndash;&gt;-->
+                <!--&lt;!&ndash;<input type="number" min="0" class="form-control input-sm" placeholder="请输入..."&ndash;&gt;-->
+                <!--&lt;!&ndash;ng-model="bll.roleGetParams.branchNo">&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                <!--<div class="col-sm-8 pull-right">-->
+                    <!--<a type="submit" ng-click="rolesQry()" class="query-button pull-right">查 询</a>-->
+
+                <!--</div>-->
+            <!--</div>-->
+        <!--</form>-->
+    <!--</div>-->
+    <!--<div class="model-body">-->
+        <!--<div class="panel-head">-->
+            <!--<div class="form-title role-set-head">-->
+                <!--<span class="pull-left form-header-left"></span><span-->
+                    <!--class="pull-left form-header-right">角色列表</span>  <span class="role-record-count">总记录数：</span><span ng-bind="pagination.total_items"></span>-->
+                <!--<a type="submit" ng-click="ui.modal.open_add('角色新增')" class="add-button pull-right" button-rights="21">新-->
+                    <!--增</a>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="content-body">-->
+            <!--<table class="table table-margin">-->
+                <!--<tr class="table-header">-->
+                    <!--<th width="80px">序号</th>-->
+                    <!--<th>机构名称</th>-->
+                    <!--<th>角色编号</th>-->
+                    <!--<th>角色类型</th>-->
+                    <!--<th>角色名称</th>-->
+                    <!--<th>操作</th>-->
+                <!--</tr>-->
+                <!--&lt;!&ndash;ng-dblclick="ui.modal.open_mod($index)"&ndash;&gt;-->
+                <!--<tr class="hover-change" ng-repeat="x in bll.rolesSet"-->
+                    <!--change-tr-style id="tr{{$index}}">-->
+                    <!--<td ng-cloak>{{(ui.pagination.page_size*(ui.pagination.page_no-1))+ $index+1}}</td>-->
+                    <!--<td ng-cloak>{{ x.branchNo }}</td>-->
+                    <!--<td ng-cloak>{{ x.roleId }}</td>-->
+                    <!--<td ng-cloak hs-format-dict="{{ x.roleType }}"-->
+                        <!--dict-entry="{{ bll.dicts.roleType }}"></td>-->
+                    <!--<td ng-cloak>{{ x.roleName}}</td>-->
+                    <!--<td ng-cloak class="role-operate" style="padding-left: 2%;">-->
+                        <!--<a type="button"-->
+                           <!--ng-click="ui.modal.open_grunt_right($index,'角色授权')" button-rights="24" title="授权">-->
+                            <!--<span class="iconfont icon-yaochi table-icon fuquan-bgcolor"></span>-->
+                        <!--</a>-->
+                        <!--<a type="button"-->
+                           <!--ng-click="ui.modal.open_right($index,'角色修改')" button-rights="22" title="修改">-->
+                            <!--<span class="iconfont table-icon update-bgcolor">&#xe60d;</span>-->
+                        <!--</a>-->
+                        <!--<a type="button"-->
+                           <!--ng-click="ui.modal.open_cut($index,'角色删除')"  button-rights="23" title="删除">-->
+                            <!--<span class="iconfont icon-lajitong-copy table-icon del-bgcolor role-delete"></span>-->
+                        <!--</a>-->
+                    <!--</td>-->
+                <!--</tr>-->
+            <!--</table>-->
+            <!--<small ng-if="!bll.rolesSet.length>0">暂无数据</small>-->
+            <!--<div class="text-right">-->
+                <!--<uib-pagination total-items="pagination.total_items" previous-text="上一页"-->
+                                <!--items-per-page="bll.roleGetParams.pageSize" next-text="下一页"-->
+                                <!--ng-model="bll.roleGetParams.pageNo" max-size="5"-->
+                                <!--class="pagination-sm"-->
+                                <!--ng-change="pagination.pageChange()"-->
+                                <!--boundary-link-numbers="true" rotate="false"></uib-pagination>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+
+<!--添加、修改、删除-->
+<script type="text/ng-template" id="mod.html">
+    <div class="favorPop sysPop new-roles">
+        <div class="popTab">
+            <span class="tabTitle">{{ui.modalTitle}}</span> <i class="iconfont icon-2 pull-right"
+                                                               ng-click="ui.cancel()" ng-mouseleave="isCheck()"
+                                                               ng-mouseenter="notCheck()"></i>
+        </div>
+        <form role="form" name="roleSetForm" ng-submit="submitForm(myForm.$valid)"
+              class="form-horizontal" novalidate ng-submit="ui.submitByValidate(roleSetForm.$valid)">
+        <!--<form role="form" class="form-horizontal">-->
+            <div class="form-group">
+                <label class="col-sm-4 control-label text-dis"><span class="red">*</span>机构编码：</label>
+                <div class="col-sm-6">
+                    <!--<input type="text" class="form-control input-sm " placeholder="请输入..."-->
+                    <!--ng-model="ui.modalData.branchNo" ng-disabled="ui.isMod">-->
+                    <select id="branchNo" name="branchNo" class="form-control input-sm" ng-model="ui.modalData.branchNo" ng-focus="true" required
+                            ng-disabled="ui.isMod"
+                            ng-options="o.branchNo as (o.branchNo+'&nbsp;&nbsp;&nbsp;&nbsp;'+o.branchName) for o in ui.bll.dataMulList"
+                            >
+                        <option value="">--请选择--</option>
+                    </select>
+                    <div class="error" ng-messages="roleSetForm.branchNo.$error"
+                         ng-if="!roleSetForm.branchNo.$focused&&!roleSetForm.branchNo.$isInit">
+                        <div ng-message="required" class="red">机构编号为必填项</div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label text-dis"><span class="red">*</span>角色类型：</label>
+                <div class="col-sm-6">
+                    <select class="form-control input-sm " name="roleType" ng-model="ui.modalData.roleType" ng-focus="true" required
+                            ng-options="o.code as o.value for o in ui.bll.dicts.roleType">
+                        <option value="">--请选择--</option>
+                    </select>
+                    <div class="error" ng-messages="roleSetForm.roleType.$error"
+                         ng-if="!roleSetForm.roleType.$focused&&!roleSetForm.roleType.$isInit">
+                        <div ng-message="required" class="red">角色类型为必填项</div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label text-dis"><span class="red">*</span>角色名称：</label>
+                <div class="col-sm-6">
+                    <!--<input type="text" class="form-control input-sm" placeholder="请输入..."-->
+                           <!--ng-model="ui.modalData.roleName">-->
+                    <input type="text" class="form-control input-sm" name="roleName"
+                           placeholder="请输入..."
+                           ng-model="ui.modalData.roleName"  ng-focus="true" required>
+                    <div class="error" ng-messages="roleSetForm.roleName.$error"
+                         ng-if="!roleSetForm.roleName.$focused&&!roleSetForm.roleName.$isInit">
+                        <div ng-message="required" class="red">角色名称为必填项</div>
+                    </div>
+                </div>
+            </div>
+            <button class="query-button dialog-modal" type="submit" ng-click="ui.submit()"
+               ng-disabled="roleSetForm.branchNo.$invalid||roleSetForm.roleType.$invalid||roleSetForm.roleName.$invalid">确定
+            </button>
+        </form>
+    </div>
+</script>
+
+<!--赋权-->
+<script type="text/ng-template" id="grunt.html">
+    <div class="favorPop sysPop res-rolesset-height roles-set">
+        <div class="popTab">
+            <span class="tabTitle">{{ui.modalTitle}}</span> <i class="iconfont icon-2 pull-right"
+                                                               ng-click="ui.cancel()"></i>
+        </div>
+        <form role="form" class="form-horizontal" name="form" ng-submit="ui.search()">
+            <div class="row">
+                <div class="col-sm-6 role-accredit">
+                    <div class="form-title">
+                        <span class="pull-left form-header-left"></span>
+                        <span class="pull-left form-header-right">角色赋权</span>
+                    </div>
+                    <div class="form-content">
+                        <right-tree is-right-tree="true" own-result-flag="true" tree-data="ui.bll.menusInfo" id="menuId"
+                                    is-change="true" diplay-all-flag="ui.bll.qryParams.check"
+                                    display-node="ui.displayNode" show-level="1"
+                                    children="children" must-disply-text="menuCaption"
+                                    search-callback = "ui.searchCallback(length,result)"
+                                    change-right="ui.bll.changeRight(addResult,delResult)"
+                                    text-field="menuId,menuCaption" own-result="ui.bll.ownRoles2FuncSet"
+                                    del-result="ui.bll.addResult" add-result="ui.bll.delResult">
+                        </right-tree>
+                    </div>
+                </div>
+                <div class="col-sm-6 role-info">
+                    <div class="form-title">
+                        <span class="pull-left form-header-left"></span><span
+                            class="pull-left form-header-right">角色信息</span></div>
+                    <div class="query-info">
+                        <ul class="oper-right-ul">
+                            <li class="oper-list-left"><span>机构编码：</span><span
+                                    name="errorNoT">{{ui.modalData.branchNo }}</span>
+                            </li>
+                            <li class="oper-list-right"><span>角色类别：</span><span name="errorNoT" ng-cloak
+                                                                           hs-format-dict="{{ ui.modalData.roleType }}"
+                                                                           dict-entry="{{ ui.bll.dicts.roleType }}"></span>
+                            </li>
+                            <li class="oper-list-left"><span>角色编号：</span><span>{{ ui.modalData.roleId }}</span>
+                            </li>
+                            <li class="oper-list-right"><span>角色名称：</span><span>{{ ui.modalData.roleName }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control input-sm " placeholder="请输入菜单号或名称"
+                               ng-model="ui.bll.qryParams.index">
+                        <span class="inline-block">
+                            <span class="ILBStyle">
+                                <input id="checkbox" name="checkbox" ng-model="ui.bll.qryParams.check" type="checkbox"
+                                    value="checkbox" checked="checked"/>
+                                <label class="inInLabel" for="checkbox"></label>
+                            </span>
+                            <label for="checkbox" class="role-display-menu">显示菜单号和功能号</label>
+                        </span>
+
+                        <!--<input id="checkbox" name="checkbox" ng-model="ui.bll.qryParams.check" type="checkbox"-->
+                        <!--value="checkbox" checked="checked"/>-->
+                        <!--<label for="checkbox" style="font-weight: normal;cursor: pointer"-->
+                        <!--style="padding-left: 5px;">显示菜单号和功能号</label>-->
+                        <a class="query-button pull-right" ng-click="ui.search()">查 询</a>
+                        <hr class="role-line">
+                        <ul class="role-set-ul">
+                            <li><i class="iconfont icon-2 cha-color "></i>对此菜单或按钮无权限</li>
+                            <li><i class="iconfont icon-1 gou-color"></i>对此菜单或按钮有权限</li>
+                            <li><i class="iconfont icon-3 wenhao-bgcolor"></i>对此菜单有部分权限</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <a class="query-button dialog-modal" type="submit" ng-click="save()">保 存</a>
+        </form>
+    </div>
+</script>

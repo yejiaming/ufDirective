@@ -1,0 +1,19 @@
+<div class="st-popup st-combobox "
+     ng-keydown="vm.keydownHandler($event)"
+     ng-click="vm.clickHandler($event)"
+     is-open="vm.isopen" ng-disabled="vm.enable">
+    <div class="st-popup-menu st-combobox-menu">
+        <ul>
+            <li ng-repeat="data in vm.datasource"
+                ng-class="{'st-combobox-selected':($index===vm.selectedindex&&!data['isGroup']) || data['_checked'],'st-combobox-option':!data['isGroup']}"
+                ng-click="vm.itemClickHandler(data,$event)"
+                ng-style="{'padding-left': (groupfield&&!data['isGroup']?15 : 5)+'px','font-weight':data['isGroup']?'bold':'normal'}">
+                <input ng-if="multiselect" class="st-checkbox" type="checkbox" ng-click="checkAll()"
+                       ng-checked="data['_checked']"/>
+                {{data[vm.displayName]}}
+            </li>
+        </ul>
+    </div>
+    <input class="form-control input-sm input-padding" type="text" ng-model="vm._text" ng-change="vm.inputChange()"
+           ng-disabled="vm.enable" placeholder="请输入..."/>
+</div>

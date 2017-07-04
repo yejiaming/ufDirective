@@ -1,0 +1,163 @@
+<!--调整-->
+<div class="page page-opertor" ng-controller="branchSetCtrl">
+    <div class="panel-head">
+        <a type="submit" button-rights="19" ng-click="save()"
+           class="query-button pull-right">保存
+        </a>
+    </div>
+    <div class="content-body">
+        <div class="col-sm-5">
+            <div class="res-tree-title">
+                <span>组织机构配置</span>
+            </div>
+            <div class="res-tree-content">
+                <right-tree is-right-tree="false" tree-data="bll.result" id="branchNo"
+                            is-change="true" display-node="displayNode" show-level="1" children="children"
+                            text-field="branchNo,branchName" item-clicked="bll.getItemClicked(item)">
+                </right-tree>
+                <ul class="button-ul">
+                    <li><a type="submit" ng-click="add('新增')" class="add-button" button-rights="16">新增</a></li>
+                    <li><a type="submit" ng-click="add('修改')" class="query-button"
+                           button-rights="17">修改</a></li>
+                    <li><a type="submit" ng-click="del('删除')" class="query-button"
+                           button-rights="18">删除</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-7">
+            <div class="res-tree-title">
+                <span>菜单配置</span></div>
+            <div class="res-tree-content">
+                <right-tree is-right-tree="true" own-result-flag="true" tree-data="bll.menusInfo.data"
+                            id="menuId" children="children" change-right="changeRight(addResult,delResult)"
+                            show-level="1"
+                            text-field="menuId,menuCaption" own-result="bll.ownResult" add-result="delResult"
+                            del-result="addResult">
+                </right-tree>
+                <hr>
+                <ul class="res-right-manager">
+                    <li><i class="iconfont icon-1 gou-color"></i>已选择</li>
+                    <li><i class="iconfont icon-2 cha-color"></i>未选择</li>
+                    <li><i class="iconfont icon-3 wenhao-bgcolor"></i>有部分选择</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--修改-->
+<script type="text/ng-template" id="mod.html">
+    <div class="favorPop sysPop">
+        <div class="popTab">
+            <span class="tabTitle">{{ui.modalTitle}}</span> <i class="iconfont pull-right icon-2"
+                                                               ng-click="ui.cancel()" ng-mouseleave="isCheck()"
+                                                               ng-mouseenter="notCheck()"></i>
+        </div>
+        <form role="form" name="sysConfigSetForm" ng-submit="submitForm(myForm.$valid)"
+              class="form-horizontal" novalidate ng-submit="ui.submitByValidate(sysConfigSetForm.$valid)" novalidate>
+            <div class="form-group margin-form-group">
+                <!--<label class="col-sm-3 control-label res-padding-top"><span class="red">*</span>机构代码：</label>-->
+                <!--<div class="col-sm-3">-->
+                <!--<input type="text" class="form-control input-sm res-input-sm" name="branch_no"-->
+                <!--ng-hide="ui.modalData.status=='hsDelete'"  placeholder="请输入..."-->
+                <!--ng-model="ui.modalData.branch_no" ng-disabled="ui.isMod" ng-focus="true" required>-->
+                <!--<div class="error" ng-messages="sysConfigSetForm.branch_no.$error"-->
+                <!--ng-if="!sysConfigSetForm.branch_no.$focused&&!sysConfigSetForm.branch_no.$isInit">-->
+                <!--<div ng-message="required" class="red">机构代码为必填项</div>-->
+                <!--</div>-->
+                <!--</div>-->
+                <label class="col-sm-3 control-label" ng-if="ui.modalTitle == '新增' "><span
+                        class="red">*</span>上级机构：</label>
+                <label class="col-sm-3 control-label" ng-if="ui.modalTitle == '修改' "><span
+                        class="red">*</span>机构编码：</label>
+                <div class="col-sm-3" ng-if="ui.modalTitle == '新增' ">
+                    <input type="text" class="form-control input-sm res-input-sm" name="upperBranchNo"
+                           ng-hide="ui.modalData.status=='hsDelete'" placeholder="请输入..."
+                           ng-model="ui.modalData.upperBranchStyle" disabled="disabled"
+                           ng-focus="true" required
+                           ng-if="ui.modalTitle == '新增' ">
+                    <div class="error" ng-messages="sysConfigSetForm.upperBranchNo.$error"
+                         ng-if="!sysConfigSetForm.upperBranchNo.$focused&&!sysConfigSetForm.upperBranchNo.$isInit"
+                         ng-if="ui.modalTitle == '新增' ">
+                        <div ng-message="required" class="red" ng-if="ui.modalTitle == '新增' ">上级机构为必填项</div>
+                    </div>
+                </div>
+                <div class="col-sm-3" ng-if="ui.modalTitle == '修改' ">
+                    <input type="text" class="form-control input-sm res-input-sm" name="branchNo"
+                           ng-hide="ui.modalData.status=='hsDelete'" placeholder="请输入..."
+                           ng-model="ui.modalData.branchNo" ng-focus="true" required disabled="disabled"
+                           ng-if="ui.modalTitle == '修改' ">
+                    <div class="error" ng-messages="sysConfigSetForm.branchNo.$error"
+                         ng-if="!sysConfigSetForm.branchNo.$focused&&!sysConfigSetForm.branchNo.$isInit"
+                         ng-if="ui.modalTitle == '修改' ">
+                        <div ng-message="required" class="red" ng-if="ui.modalTitle == '修改' ">机构编码为必填项</div>
+                    </div>
+                </div>
+
+                <label class="col-sm-3 control-label">联系人：</label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control input-sm res-input-sm" placeholder="请输入..." maxlength="20"
+                           ng-model="ui.modalData.chargeName">
+                    <!--<div class="error" ng-messages="sysConfigSetForm.ChargeName.$error"-->
+                    <!--ng-if="!sysConfigSetForm.ChargeName.$focused&&!sysConfigSetForm.ChargeName.$isInit">-->
+                    <!--<div ng-message="required" class="red">联系人为必填项</div>-->
+                    <!--</div>-->
+                </div>
+
+            </div>
+            <div class="form-group margin-form-group">
+                <label class="col-sm-3 control-label"><span class="red">*</span>机构名称：</label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control input-sm res-input-sm" name="branchName" maxlength="20"
+                           ng-hide="ui.modalData.status=='hsDelete'" placeholder="请输入..."
+                           ng-model="ui.modalData.branchName" ng-disabled="ui.isMod" ng-focus="true" required>
+                    <div class="error" ng-messages="sysConfigSetForm.branchName.$error"
+                         ng-if="!sysConfigSetForm.branchName.$focused&&!sysConfigSetForm.branchName.$isInit">
+                        <div ng-message="required" class="red">机构名称为必填项</div>
+                    </div>
+                </div>
+
+                <label class="col-sm-3 control-label">联系电话：</label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control input-sm res-input-sm" placeholder="请输入..."
+                           maxlength="11"
+                           onkeyup="this.value=this.value.replace(/\D/g,'')"
+                           onafterpaste="this.value=this.value.replace(/\D/g,'')"
+                           ng-model="ui.modalData.chargeTelephone">
+                    <!--<div class="error" ng-messages="sysConfigSetForm.ChargeTelephone.$error"-->
+                    <!--ng-if="!sysConfigSetForm.ChargeTelephone.$focused&&!sysConfigSetForm.ChargeTelephone.$isInit">-->
+                    <!--<div ng-message="required" class="red">联系电话为必填项</div>-->
+                    <!--</div>-->
+                </div>
+            </div>
+            <div class="form-group margin-form-group">
+            <label class="col-sm-3 control-label"><span class="red">*</span>机构类别：</label>
+            <div class="col-sm-3">
+                <select class="form-control input-sm res-input-sm" ng-model="ui.modalData.branchType"
+                        ng-options="o.code as (o.code+'-'+o.value) for o in ui.bll.dicts.branchType"
+                        ng-disabled="ui.isMod">
+                    <option value="">--请选择--</option>
+                </select>
+            </div>
+
+            <label class="col-sm-3 control-label">对应机构编码：</label>
+            <div class="col-sm-3">
+                <input type="text" class="form-control input-sm res-input-sm" name="branchCode" maxlength="20"
+                       ng-hide="ui.modalData.status=='hsDelete'" placeholder=""
+                       ng-model="ui.modalData.branchCode" ng-disabled="ui.isMod" ng-focus="true" required>
+            </div>
+        </div>
+
+            <div class="form-group margin-form-group">
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-4">
+                    <textarea class="form-control input-sm res-input-sm" maxlength="500" style="width: 431px;" placeholder="请输入..." maxlength="2000"
+                           ng-model="ui.modalData.remark"/>
+                </div>
+
+            </div>
+
+            <a class="query-button dialog-modal" type="submit" ng-click="ui.submit()">提交</a>
+        </form>
+    </div>
+</script>

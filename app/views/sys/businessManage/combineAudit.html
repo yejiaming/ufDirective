@@ -1,0 +1,161 @@
+<link rel="stylesheet" href="styles/css/combineAutit.css">
+<link rel="stylesheet" href="styles/css/publicStyle.css">
+<link rel="stylesheet" href="styles/css/bootstrap.min.css">
+<link rel="stylesheet" href="styles/css/cloud-ui.min.css">
+<link rel="stylesheet" href="styles/src/newChange.css">
+
+<div class="page page-combineAutit" ng-controller="combineAuditCtrl">
+    <div class="panel-heading">
+        <div>
+            <select ng-model="qryParams.verify_status">
+                <option value="">全部</option>
+                <option value="0">未审核</option>
+                <option value="1">审核通过</option>
+                <option value="2">审核不通过</option>
+            </select>
+        </div>
+        <div>
+            <form class="cloud-ui-form" method="" role="search">
+                <div class="search-box box-size">
+                    <input class="search-input" type="text" ng-model="qryParams.name" placeholder="请输入组合名称">
+                    <button><i class="iconfont icon-search" title="搜索" ng-click="search()"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="content-body">
+        <div class="combineAutit-list col-sm-6">
+            <div class="combineAutit-left">
+                <table class="content-list">
+                    <thead>
+                    <tr class="table-title">
+                        <th class="col-sm-3">组合名称</th>
+                        <th class="col-sm-3">所属营业部</th>
+                        <th class="col-sm-3">创建人</th>
+                        <th class="col-sm-3">审核状态</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody class="main-list">
+                    <tr class="selected" ng-repeat="item in combineItems"
+                        ng-class="{true:'active',false:''}[$index === 0]"
+                        id="combi_{{item.apply_no}}" ng-click="showCombiDetails(item)">
+                        <td class="col-sm-3" title="{{item.combi_name}}">{{item.combi_name}}</td>
+                        <td class="col-sm-3" title="{{item.branch_name}}">{{item.branch_name}}</td>
+                        <td class="col-sm-3" title="{{item.client_name}}">{{item.client_name}}</td>
+                        <td class="col-sm-3" hs-format-dict="{{item.verify_status}}"
+                            dict-entry="{{otherParams.dicts.verify_status}}"
+                            ng-class="{'passFont':item.verify_status == '1','noPassFont':item.verify_status == '2'}"></td>
+                        <td class="arr"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!--分页-->
+            <!--<div class="cloud-ui-pagination pagination">-->
+                <!--<ul uib-pagination boundary-links="false" force-ellipses="true"-->
+                    <!--direction-links="true" previous-text="上一页" next-text="下一页" ng-change="pageChange()"-->
+                    <!--ng-model="pageParams.pageNo" total-items="pageParams.totalItems" max-size="pageParams.maxSize"-->
+                    <!--items-per-page="combineQryParams.request_num" class="pagination-sm">-->
+                <!--</ul>-->
+            <!--</div>-->
+            <div class="text-right pagination">
+                <uib-pagination total-items="pageParams.totalItems" previous-text="上一页"
+                                items-per-page="combineQryParams.request_num" next-text="下一页"
+                                ng-model="pageParams.pageNo"
+                                max-size="pageParams.maxSize" class="pagination-sm"
+                                ng-change="pageChange()"
+                                boundary-link-numbers="true" rotate="false" force-ellipses="true" boundary-links="false" direction-links="true"></uib-pagination>
+            </div>
+        </div>
+        <div class="combineAutit-detail col-sm-6">
+            <div class="combineAutit-title"></div>
+            <div class="combineAutit-content">
+                <div class="audit-status">
+                    <img class="no-pass" src="images/no-pass.png" ng-show="combiDetails.verifyStatus == '2'" alt=""/>
+                    <img class="already-pass" src="images/already-pass.png" ng-show="combiDetails.verifyStatus == '1'"
+                         alt=""/>
+                </div>
+                <div class="detail-title">
+                    <h4>{{combiDetails.combiName}}</h4>
+                    <div class="col-sm-6">
+                        <label class="col-sm-8">组合风格:</label>
+                        <div class="col-sm-4" hs-format-dict="{{combiDetails.investStyle}}"
+                             dict-entry="{{otherParams.dicts.invest_style}}"></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="col-sm-8">创建人:</label>
+                        <div class="col-sm-4" title="{{combiDetails.clientName}}">{{combiDetails.clientName}}</div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="col-sm-8">所属营业部:</label>
+                        <div class="col-sm-4" title="{{combiDetails.branchName}}">{{combiDetails.branchName}}</div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="col-sm-8">预设价格:</label>
+                        <div class="col-sm-4" ng-show="combiDetails.farePerMonthStr">
+                            {{combiDetails.farePerMonthStr}}元/月
+                        </div>
+                    </div>
+                </div>
+                <div class="detail-introduce">
+                    <span>组合介绍</span>
+                    <p>{{combiDetails.backgroundInfo}}</p>
+                </div>
+                <div>
+                    <span>创建时间</span>
+                    <div class="detail-time" ng-show="combiDetails.applyTime">{{combiDetails.applyDate}} {{
+                        combiDetails.applyTime | formatStrToTime}}
+                    </div>
+                </div>
+                <div class="detail-record">
+                    <span>审核历史</span>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th class="col-sm-3">审核人</th>
+                            <th class="col-sm-3">审核状态</th>
+                            <th class="col-sm-6">审核时间</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="item in combiApplyHis | limitTo:otherParams.combiHisSize"
+                            ng-click="combiHisObj(item)">
+                            <td class="col-sm-3" title="昵称">
+                                {{item.remark&&item.remark.indexOf('审核人')>0?item.remark.substr(item.remark.lastIndexOf('审核人')+4):''}}
+                            </td>
+                            <td class="col-sm-3" hs-format-dict="{{item.verify_status}}"
+                                dict-entry="{{otherParams.dicts.verify_status}}"></td>
+                            <td class="col-sm-6">{{item.curr_date}} {{ item.curr_time | formatStrToTime}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <button ng-click="otherParams.combiHisSize = 1000"
+                            ng-show="combiApplyHis&&combiApplyHis.length>2&&otherParams.combiHisSize != 1000">
+                        加载更多
+                    </button>
+                </div>
+                <div>
+                    <span>审核意见</span>
+                    <textarea class="detail-opinion" ng-model="combineAuditParams.remark"
+                              ng-readonly="combiDetails.verifyStatus != '0'">
+                    </textarea>
+                </div>
+            </div>
+            <div class="combineAutit-footer">
+                <button class="btn-normal bg-green" ng-disabled="combiDetails.verifyStatus != '0'"
+                        ng-class="{true:'btn-disabled',false:''}[combiDetails.verifyStatus != '0']"
+                        ng-click="combineAudit('yes')" type="button" data-toggle="modal"
+                        data-target="#sensitive-add">
+                    审核通过
+                </button>
+                <button class="btn-normal bg-red" ng-disabled="combiDetails.verifyStatus != '0'"
+                        ng-click="combineAudit('no')" type="button" data-toggle="modal"
+                        ng-class="{true:'btn-disabled',false:''}[combiDetails.verifyStatus != '0']"
+                        data-target="#sensitive-delete">
+                    审核不通过
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

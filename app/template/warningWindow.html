@@ -1,0 +1,15 @@
+<div class="favorPop sysPop del fixed-position" style="width: 455px;height: 278px;">
+    <div class="popTab">
+        <span class="tabTitle">{{vm.modalTitle}}</span> <i class="iconfont pull-right icon-2"
+                                                           ng-click="vm.cancel()" ng-mouseleave="isCheck()"
+                                                           ng-mouseenter="notCheck()"></i>
+    </div>
+    <div class="content">
+        <div class="table">
+            <div class="massage">
+                {{vm.modalInfo}}
+            </div>
+        </div>
+    </div>
+    <a class="query-button dialog-modal" type="submit" ng-click="vm.submit()">关闭</a>
+</div>

@@ -1,0 +1,67 @@
+<div class="favorPop sysPop oper-right-set operator-authorization" style="margin-top: -30px">
+    <div class="popTab">
+        <span class="tabTitle">{{ui.modalTitle}}</span> <i class="iconfont pull-right icon-2"
+                                                           ng-click="ui.cancel()" ng-mouseleave="isCheck()"
+                                                           ng-mouseenter="notCheck()"></i>
+    </div>
+    <form role="form" class="form-horizontal" name="operSetForm" novalidate>
+        <div class="form-title">
+            <span class="pull-left form-header-left"></span><span
+                class="pull-left form-header-right">操作员信息</span></div>
+        <div class="query-info">
+            <ul class="oper-right-ul">
+                <li class="first-li"><span class="first-span">机构编码：</span><span class="second-span">{{ui.bll.operRightSet.branchName }}</span>
+                </li>
+                <li class="second-li"><span class="first-span">操作员编号：</span><span class="second-span">{{ ui.bll.operRightSet.operatorNo }}</span></li>
+                <li class="third-li"><span class="first-span">姓名：</span><span class="second-span">{{ ui.bll.operRightSet.name }}</span>
+                </li>
+            </ul>
+        </div>
+        <div style="width: 100%">
+            <div style="width: 49.5%;float: left">
+                <div class="res-tree-title">
+                    <span>数据权限配置</span>
+                </div>
+                <div class="tree-content">
+                    <!--change-right="ui.bll.changeBranchRight(addResult,delResult,item,root)"-->
+                    <!--change-right="ui.bll.changeRightBranch(addResult,delResult,item,root)"-->
+                    <right-tree is-right-tree="true" tree-data="ui.bll.ownbranchInfo.data" id="branchNo"
+                                own-result-flag="true"
+                                children="children"
+                                show-level="1"
+                                text-field="branchNo,branchName"
+                                change-right="ui.bll.changeRightBranch(addResult,delResult,item,root)"
+                                own-result="ui.bll.operbrancInfo.data" own-result-type="array" del-result="ui.bll.delBranchResultList" add-result="ui.bll.addBranchResultList" init-show="false">
+                    </right-tree>
+                </div>
+            </div>
+            <div style="width: 49.5%;float: right">
+                <div class="res-tree-title">
+                    <span>角色配置</span></div>
+                <!--change-right="ui.bll.changeRoleRight(addResult,delResult,item,root)"-->
+                <!--change-right="ui.bll.changeRight(addResult,delResult)"-->
+                <!--del-result="ui.bll.delRoleResultList" add-result="ui.bll.addRoleResultList"-->
+                <!--init-show="false"-->
+                <div class="tree-content">
+                    <right-tree is-right-tree="true" own-result-flag="true" tree-data="ui.bll.treeroleInfo.data" show-level="-1"
+                                id="roleId" children="children"
+                                change-right="ui.bll.changeRight(addResult,delResult,item,root)"
+                                text-field="roleName" own-result="ui.bll.operroleInfo.data" del-result="ui.bll.addResult" add-result="ui.bll.delResult" own-result-type="array">
+                    </right-tree>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <ul class="res-right-manager">
+                <li><i class="iconfont icon-1 gou-color"></i>已选择</li>
+                <li><i class="iconfont icon-2 cha-color"></i>未选择</li>
+                <li><i class="iconfont icon-3 wenhao-bgcolor"></i>有部分选择</li>
+            </ul>
+        </div>
+        <div class="oper-footer">
+            <a type="submit" ng-click="ui.submit()" style="margin-left: 41%"
+               class="query-button">保 存
+            </a>
+        </div>
+    </form>
+</div>

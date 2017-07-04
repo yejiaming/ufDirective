@@ -1,0 +1,490 @@
+<div ng-controller="brokerCtrl" class="bgContainer page-broker">
+    <div class="common-module-container business-consultant-management">
+        <ul id="myTab" class="tab-label" role="tablist">
+            <li role="presentation" class="tab-item active">
+                <a href="#inService" id="inServiceTab" role="tab" data-toggle="tab" aria-controls="inService" aria-expanded="false" ng-click="sheetChange(0)">在职投顾</a>
+            </li>
+            <li role="presentation" class="tab-item">
+                <a href="#restriction" id="restrictionTab" role="tab"  data-toggle="tab" aria-controls="restriction" aria-expanded="true" ng-click="sheetChange(1)">限制投顾</a>
+            </li>
+        </ul>
+        <div id="myTabContent" class="tab-content">
+            <div role="tabpanel" class="tab-pane active {{hideInvest}}" id="inService" aria-labelledby="inServiceTab">
+                <div class="content-head">
+                    <h2 class="content-title">角色列表</h2>
+                    <div class="search-content">
+                        <form class="form-content" method="get" role="search">
+                            <div class="search-box">
+                                <label for="searchInvest">搜索投顾</label>
+                                <input class="input-search" type="text" maxlength="20" id="searchInvest" ng-model="searchCriteriaForInvest" placeholder="">
+                                <span class="iconfont icon icon-search searchForInvest"  title="搜索投顾" data-toggle="modal"  ng-click="searchForInvest(0)"></span>
+                            </div>
+                        </form>
+                        <div class="button-box">
+                            <a class="add-consultant btn-primary-blue" href="#/addNewConsultant/0">新增</a>
+                            <a href="#/brokerBatchRegister/0" class="add-consultant btn-primary-blue broker-batch">批量新增</a>
+                            <button class="btn-primary-green" type="button" data-toggle="modal" data-target="#exportExcelModal" ng-click="excelReport(0)">导出</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-wrap normal-interest">
+                    <div class="adviser-list-content">
+                        <div class="list-head">
+                            <span class="list-item w30">投顾昵称</span>
+                            <span class="list-item w40">手机号码</span>
+                            <span class="list-item w30">归属</span>
+                        </div>
+                        <div class="list-content list-link">
+                            <ul >
+                                <li ng-click="getInvestInfo($index)" change-tr-style="js-selected" ng-repeat="invest in bll.resultWhite"
+                                    ng-class="{true: 'js-selected',false: ''}[$index == 0]">
+                                    <span class="list-item adviser-name w30" title="{{invest.aliasName}}">{{invest.aliasName}}</span>
+                                    <span class="list-item w40">{{invest.mobile}}</span>
+                                    <span class="list-item adviser-department w30" title="{{invest.tenantId | tenantIdToName}}">{{invest.tenantId | tenantIdToName}}</span>
+                                    <span class="arr"></span>
+                                </li>
+                            </ul>
+                            <small ng-if="!bll.resultWhite.length>0" class="data-miss">暂无数据</small>
+                        </div>
+                        <div class="text-right">
+                            <uib-pagination total-items="paginationWhite.total_items" previous-text="上一页"
+                                            items-per-page="bll.qryParamsWhite.pageSize" next-text="下一页"
+                                            ng-model="bll.qryParamsWhite.pageNo"
+                                            max-size="5" class="pagination-sm"
+                                            ng-change="paginationWhite.pageChange()"
+                                            boundary-link-numbers="true" rotate="false"></uib-pagination>
+                        </div>
+                    </div>
+                    <div class="adviser-info-content">
+                        <div class="adviser-info-head">
+                            <img class="adviser-avatar" ng-src="{{bll.investPerformQry.what.result.picUrl}}" onerror="this.src='images/avatar.png'"  alt={{bll.investPerformQry.what.result.aliasName}}>
+                            <p class="adviser-introduce"><strong class="adviser-name">{{bll.investPerformQry.what.result.aliasName}}</strong><span class="adviser-type"></span><i class="adviser-status">正常</i></p>
+                            <div class="adviser-info-box">
+                                <dl class="info-group">
+                                    <dt class="info-title">微信公众号：</dt>
+                                    <!--//  <dd class="info-text">{{bll.investPerformQry.what.result.weixinNo}}</dd>-->
+                                    <!--<a title="{{bll.investPerformQry.what.result.weixinNo}}">-->
+                                    <!--<span class="list-item w50">{{x.validTime | formatStrToDate}}</span>-->
+                                    <dd class="info-text" title="{{bll.investPerformQry.what.result.weixinNo}}" ng-show="bll.investPerformQry.what.result.weixinNo.length>12">
+                                        {{bll.investPerformQry.what.result.weixinNo.substring(0,5)}}.....{{bll.investPerformQry.what.result.weixinNo.substring(bll.investPerformQry.what.result.weixinNo.length-3,bll.investPerformQry.what.result.weixinNo.length)}}
+                                    </dd>
+                                    <!--<dd class="info-text " title="{{bll.investPerformQry.what.result.weixinNo}}" ng-show="bll.investPerformQry.what.result.weixinNo.length>20">-->
+                                        <!--{{bll.investPerformQry.what.result.weixinNo.substring(0,5)}}.....{{bll.investPerformQry.what.result.weixinNo.substring(bll.investPerformQry.what.result.weixinNo.length-3,bll.investPerformQry.what.result.weixinNo.length)}}-->
+                                    <!--</dd>-->
+                                    <dd class="info-text" ng-show="bll.investPerformQry.what.result.weixinNo.length<=12">{{bll.investPerformQry.what.result.weixinNo}}</dd>
+                                    <!--</a>-->
+                                </dl>
+                                <dl class="info-group">
+                                    <dt class="info-title">手机号：</dt>
+                                    <dd class="info-text">{{bll.investPerformQry.what.result.mobile}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="adviser-info-item">
+                            <h3 class="adviser-info-title">资质信息</h3>
+                            <div class="adviser-info-box">
+                                <dl class="info-group fix-width">
+                                    <dt class="info-title">资格证书种类：</dt>
+
+                                    <span class="info-text " title="{{bll.investPerformQry.what.result.credentialsType}}" ng-show="bll.investPerformQry.what.result.credentialsType.length>12">
+                                        {{bll.investPerformQry.what.result.credentialsType.substring(0,10)}}.....{{bll.investPerformQry.what.result.credentialsType.substring(bll.investPerformQry.what.result.credentialsType.length-6,bll.investPerformQry.what.result.credentialsType.length)}}
+                                    </span>
+                                    <span class="info-text" ng-show="bll.investPerformQry.what.result.credentialsType.length<=12">{{bll.investPerformQry.what.result.credentialsType}}</span>
+
+                                    <!--<dd class="info-text">{{bll.investPerformQry.what.result.credentialsType}}</dd>-->
+                                </dl>
+                                <dl class="info-group">
+                                    <dt class="info-title">投顾类型：</dt>
+                                    <dd class="info-text">{{bll.investPerformQry.what.result.adviserType}}</dd>
+                                </dl>
+                                <dl class="info-group certification-num">
+                                    <dt class="info-title">资格证号码：</dt>
+                                    <!--<dd class="info-text">{{bll.investPerformQry.what.result.credentialsNo}}</dd>-->
+                                    <span class="info-text" title="{{bll.investPerformQry.what.result.credentialsNo}}" ng-show="bll.investPerformQry.what.result.credentialsNo.length>12">
+                                        {{bll.investPerformQry.what.result.credentialsNo.substring(0,10)}}.....{{bll.investPerformQry.what.result.credentialsNo.substring(bll.investPerformQry.what.result.credentialsNo.length-6,bll.investPerformQry.what.result.credentialsNo.length)}}
+                                    </span>
+                                    <span class="info-text" ng-show="bll.investPerformQry.what.result.credentialsNo.length<=12">{{bll.investPerformQry.what.result.credentialsNo}}</span>
+
+                                </dl>
+
+                            </div>
+                        </div>
+                        <div class="adviser-info-item">
+                            <h3 class="adviser-info-title">绩效情况</h3>
+                            <div class="adviser-info-box">
+                                <dl class="info-group">
+                                    <dt class="info-title">发布观点数：</dt>
+                                    <dd class="info-text"><span class="info-link" data-toggle="modal" data-target="#viewpointsNumber"
+                                        ng-click="investPointQry(1,bll.investPerformQry.what.result.userId,bll.investPerformQry.what.params.tenantId )"
+                                        title="点击查看">{{bll.investPerformQry.what.result.pointNum}}</span></dd>
+                                </dl>
+                                <dl class="info-group">
+                                    <dt class="info-title">评论数：</dt>
+                                    <dd class="info-text">{{bll.investPerformQry.what.result.commentNum}}</dd>
+                                </dl>
+                                <dl class="info-group">
+                                    <dt class="info-title">被点赞数：</dt>
+                                    <dd class="info-text"><span class="" data-toggle="modal"  title="点击查看" >{{bll.investPerformQry.what.result.upvoteNum}}</span></dd>
+                                </dl>
+                                <dl class="info-group">
+                                    <dt class="info-title">直播数：</dt>
+                                    <dd class="info-text">{{bll.investPerformQry.what.result.liveNum}}</dd>
+                                </dl>
+                                <dl class="info-group">
+                                    <dt class="info-title">仿真盈余：</dt>
+                                    <dd class="info-text">{{bll.investPerformQry.what.result.profitAmount}}元</dd>
+                                </dl>
+                                <div class="divide-line"></div>
+                                <dl class="info-group">
+                                    <dt class="info-title">签约次数：</dt>
+                                    <dd class="info-text">{{bll.investPerformQry.what.result.signNum}}</dd>
+                                </dl>
+                                <dl class="info-group">
+                                    <dt class="info-title">售出组合数：</dt>
+                                    <dd class="info-text">{{bll.investPerformQry.what.result.sellNum}}元</dd>
+                                </dl>
+                                <dl class="info-group">
+                                    <dt class="info-title">调仓次数：</dt>
+                                    <dd class="info-text">{{bll.investPerformQry.what.result.transNum}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="btn-box">
+                            <button class="btn-primary-green" type="button" ng-hide="bll.resultWhite.length<=0" ng-click='investFrozenOrNot(0,bll.investPerformQry.what.result.userId)'>限制</button>
+                            <a class="more-link" href="#/businessConsultantDetail" ng-show="bll.resultWhite.length>0" >更多详情</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane {{hideLimitInvest}}" id="restriction" aria-labelledby="restrictionTab">
+                <div class="content-head">
+                    <h2 class="content-title">角色列表</h2>
+                    <div class="search-content">
+                        <form class="form-content" method="get" role="search">
+                            <div class="search-box">
+                                <label for="searchLimitInvest">搜索投顾</label>
+                                <input class="input-search" maxlength="20" type="text" id="searchLimitInvest" ng-model="searchCriteriaForLimitInvest" placeholder="">
+                                <button class="iconfont icon icon-search" type="submit" title="搜索投顾" ng-click="searchForInvest(1)"></button>
+                            </div>
+                        </form>
+                        <div class="button-box">
+                            <a href="#/addNewConsultant/0" class="btn-primary-blue add-consultant">新增</a>
+                            <a href="#/brokerBatchRegister/0" class="add-consultant btn-primary-blue broker-batch">批量新增</a>
+                            <button class="btn-primary-green" type="button" data-toggle="modal" data-target="#exportExcelModal" ng-click="excelReport(1)">导出</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-wrap unusual-interest">
+                    <div class="adviser-list-content">
+                        <div class="list-head">
+                            <span class="list-item w30">投顾昵称</span>
+                            <span class="list-item w40">手机号码</span>
+                            <span class="list-item w30">归属</span>
+                        </div>
+                        <div class="list-content list-link">
+                            <ul >
+                                <li ng-click="getInvestInfo($index)" change-tr-style="js-selected" ng-repeat="invest in bll.resultBlack"
+                                    ng-class="{true: 'js-selected',false: ''}[$index == 0]">
+                                    <span class="list-item adviser-name w30" title="{{invest.aliasName}}">{{invest.aliasName}}</span>
+                                    <span class="list-item w40">{{invest.mobile}}</span>
+                                    <span class="list-item adviser-department w30" title="{{invest.tenantId | tenantIdToName}}">{{invest.tenantId | tenantIdToName}}</span>
+                                    <span class="arr"></span>
+                                </li>
+                            </ul>
+                            <small ng-if="!bll.resultBlack.length>0" class="data-miss">暂无数据</small>
+                        </div>
+                        <div class="text-right">
+                            <uib-pagination total-items="paginationBlack.total_items" previous-text="上一页"
+                                            items-per-page="bll.qryParamsBlack.pageSize" next-text="下一页"
+                                            ng-model="bll.qryParamsBlack.pageNo"
+                                            max-size="5" class="pagination-sm"
+                                            ng-change="paginationBlack.pageChange()"
+                                            boundary-link-numbers="true" rotate="false"></uib-pagination>
+                        </div>
+                    </div>
+                    <div class="adviser-info-content">
+                        <div class="adviser-info-head">
+                            <img class="adviser-avatar" ng-src="{{bll.investPerformQry.what.result.picUrl}}" onerror="this.src='images/avatar.png'" alt={{bll.investPerformQry.what.result.aliasName}}>
+                            <p class="adviser-introduce"><strong class="adviser-name">{{bll.investPerformQry.what.result.aliasName}}</strong><span class="adviser-type"></span><i class="adviser-status status-limit">限制</i></p>
+                            <div class="adviser-info-box">
+                                <dl class="info-group">
+                                    <dt class="info-title">微信公众号：</dt>
+                                    <dd class="info-text">{{bll.investPerformQry.what.result.weixinNo}}</dd>
+                                </dl>
+                                <dl class="info-group">
+                                    <dt class="info-title">手机号：</dt>
+                                    <dd class="info-text">{{bll.investPerformQry.what.result.mobile}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="adviser-info-item">
+                            <h3 class="adviser-info-title">资质信息</h3>
+                            <div class="adviser-info-box">
+                                <dl class="info-group fix-width">
+                                    <dt class="info-title">资格证书种类：</dt>
+                                    <dd class="info-text">{{bll.investPerformQry.what.result.credentialsType}}</dd>
+                                </dl>
+                                <dl class="info-group">
+                                    <dt class="info-title">投顾类型：</dt>
+                                    <dd class="info-text">{{bll.investPerformQry.what.result.adviserType}}</dd>
+                                </dl>
+                                <dl class="info-group">
+                                    <dt class="info-title">资格证号码：</dt>
+                                    <dd class="info-text">{{bll.investPerformQry.what.result.credentialsNo}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="adviser-info-item">
+                            <h3 class="adviser-info-title">绩效情况</h3>
+                            <div class="adviser-info-box">
+                                <dl class="info-group">
+                                    <dt class="info-title">发布观点数：</dt>
+                                    <dd class="info-text"><span class="info-link" data-toggle="modal" data-target="#viewpointsNumber" title="点击查看" ng-click="investPointQry(1,bll.investPerformQry.what.result.userId,bll.investPerformQry.what.params.tenantId )">{{bll.investPerformQry.what.result.pointNum}}</span></dd>
+                                </dl>
+                                <dl class="info-group">
+                                    <dt class="info-title">评论数：</dt>
+                                    <dd class="info-text">{{bll.investPerformQry.what.result.commentNum}}</dd>
+                                </dl>
+                                <dl class="info-group">
+                                    <dt class="info-title">被点赞数：</dt>
+                                    <dd class="info-text"><span class="" data-toggle="modal" title="点击查看" >{{bll.investPerformQry.what.result.upvoteNum}}</span></dd>
+                                </dl>
+                                <dl class="info-group">
+                                    <dt class="info-title">直播数：</dt>
+                                    <dd class="info-text">{{bll.investPerformQry.what.result.liveNum}}</dd>
+                                </dl>
+                                <dl class="info-group">
+                                    <dt class="info-title">仿真盈余：</dt>
+                                    <dd class="info-text">{{bll.investPerformQry.what.result.profitAmount}}元</dd>
+                                </dl>
+                                <div class="divide-line"></div>
+                                <dl class="info-group">
+                                    <dt class="info-title">签约次数：</dt>
+                                    <dd class="info-text">{{bll.investPerformQry.what.result.signNum}}</dd>
+                                </dl>
+                                <dl class="info-group">
+                                    <dt class="info-title">售出组合数：</dt>
+                                    <dd class="info-text">{{bll.investPerformQry.what.result.sellNum}}元</dd>
+                                </dl>
+                                <dl class="info-group">
+                                    <dt class="info-title">调仓次数：</dt>
+                                    <dd class="info-text">{{bll.investPerformQry.what.result.TransNum}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="btn-box">
+                            <button class="btn-primary-green" type="button" ng-hide="bll.resultBlack.length<=0" ng-click='investFrozenOrNot(1,bll.investPerformQry.what.result.userId)'>解除限制</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--导出弹窗-->
+    <div class="common-module-modal more-detail-modal modal fade" id="exportExcelModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-center">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="iconfont icon icon-close"></i></button>
+                        <h4 class="modal-title">Excel导出</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="content-head"><h2 class="content-title">下载进度...{{bll.progress}}%</h2></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--观点数弹窗-->
+    <div class="common-module-modal business-consultant-modal modal fade" id="viewpointsNumber" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-center">
+            <div class="modal-dialog">
+                <div class="modal-content modal-show-position">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="iconfont icon icon-close" ng-click="tt()"></i></button>
+                        <h4 class="modal-title">观点</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="modal-tab-container">
+                            <ul id="viewpointTab" class="tab-label" role="tablist">
+                                <li role="presentation" id="liStuTab" class="tab-item active">
+                                    <a href="#studio" id="studioTab" role="tab" data-toggle="tab" aria-controls="studio" aria-expanded="false" ng-click="investPointQry(1,bll.investPerformQry.what.result.userId,bll.investPerformQry.what.params.tenantId )">工作室</a>
+                                </li>
+                                <li role="presentation" id="liLtbTab" class="tab-item">
+                                    <a href="#ltb" id="ltbTab" role="tab"  data-toggle="tab" aria-controls="ltb" aria-expanded="true" ng-click="investPointQry(2,bll.investPerformQry.what.result.userId,bll.investPerformQry.what.params.tenantId)">领投宝</a>
+                                </li>
+                            </ul>
+                            <div id="viewpointTabContent" class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="studio" aria-labelledby="studioTab">
+                                    <div class="viewpoint-list" scroll-refresh="investPointQry(1,{{bll.investPerformQry.what.result.userId}},{{bll.investPerformQry.what.params.tenantId}})">
+                                        <ul ng-repeat="vPoint in bll.investPointQry.what.stu_result">
+                                            <li class="viewpoint-list-item">
+                                                <span class="viewpoint-title" ng-show="vPoint.pointTopic.length>10"  title="{{vPoint.pointTopic}}">
+                                                    {{vPoint.pointTopic.substring(0,5)}}.....{{vPoint.pointTopic.substring(vPoint.pointTopic.length-5,vPoint.pointTopic.length)}}
+                                                </span>
+                                                <span class="viewpoint-title" ng-show="vPoint.pointTopic.length<=10">
+                                                    {{vPoint.pointTopic}}
+                                                </span>
+                                                <span class="viewpoint-title broker-color" ng-show="vPoint.pointTopic==null">
+                                                    {{"(无主题)"}}
+                                                </span>
+                                                <span class="read-num" ng-show="vPoint.upvoteNum!=null">{{vPoint.upvoteNum}}{{"赞同"}}</span>
+                                                <span class="read-num broker-color" ng-show="vPoint.upvoteNum==null">
+                                                    {{"(无点赞数)"}}
+                                                </span>
+                                                <span class="publish-time" ng-show="vPoint.pubTime!=null">{{vPoint.pubTime | toDate}}</span>
+                                                <span class="publish-time broker-color" ng-show="vPoint.pubTime==null">
+                                                    {{"(无时间)"}}
+                                                </span>
+                                            </li>
+                                        </ul>
+                                        <small ng-if="!bll.investPointQry.what.stu_result.length>0" class="data-miss">暂无数据</small>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="ltb" aria-labelledby="ltbTab">
+                                    <div class="viewpoint-list" scroll-refresh="investPointQry(2,{{bll.investPerformQry.what.result.userId}},{{bll.investPerformQry.what.params.tenantId}})">
+                                        <ul ng-repeat="lPoint in bll.investPointQry.what.ltb_result">
+                                            <li class="viewpoint-list-item">
+                                                <!--<span class="viewpoint-title">{{vPoint.pointTopic}}</span>-->
+                                                <span class="viewpoint-title" ng-show="lPoint.pointTopic.length>10"  title="{{lPoint.pointTopic}}">
+                                                    {{lPoint.pointTopic.substring(0,5)}}.....{{lPoint.pointTopic.substring(lPoint.pointTopic.length-5,lPoint.pointTopic.length)}}
+                                                </span>
+                                                <span class="viewpoint-title" ng-show="lPoint.pointTopic.length<=10">
+                                                    {{lPoint.pointTopic}}
+                                                </span>
+                                                <span class="viewpoint-title broker-color" ng-show="lPoint.pointTopic==null">
+                                                    {{"(无主题)"}}
+                                                </span>
+                                                <span class="read-num" ng-show="lPoint.upvoteNum!=null">{{lPoint.upvoteNum}}{{"赞同"}}</span>
+                                                <span class="read-num broker-color" ng-show="lPoint.upvoteNum==null">
+                                                    {{"(无点赞数)"}}
+                                                </span>
+                                                <span class="publish-time" ng-show="lPoint.pubTime!=null">{{lPoint.pubTime | toDate}}</span>
+                                                <span class="publish-time broker-color" ng-show="lPoint.pubTime==null">
+                                                    {{"(无时间)"}}
+                                                </span>
+                                            </li>
+                                        </ul>
+                                        <small ng-if="!bll.investPointQry.what.ltb_result.length>0" class="data-miss">暂无数据</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-primary-green" data-dismiss="modal" ng-click="tt()">确认</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--被点赞数弹窗-->
+    <div class="common-module-modal business-consultant-modal modal fade" id="praiseNumber" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-center">
+            <div class="modal-dialog">
+                <div class="modal-content modal-show-position">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="iconfont icon icon-close"></i></button>
+                        <h4 class="modal-title">观点</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="modal-tab-container">
+                            <ul id="praiseTab" class="tab-label" role="tablist">
+                                <li role="presentation" class="tab-item active">
+                                    <a href="#praiseStudio" id="praiseStudioTab" role="tab" data-toggle="tab" aria-controls="praiseStudio" aria-expanded="false">工作室</a>
+                                </li>
+                                <li role="presentation" class="tab-item">
+                                    <a href="#praiseLtb" id="praiseLtbTab" role="tab"  data-toggle="tab" aria-controls="praiseLtb" aria-expanded="true"  ng-click="investPointQry(2,bll.investPerformQry.what.result.userId,bll.investPerformQry.what.params.tenantId)">领投宝</a>
+                                </li>
+                            </ul>
+                            <div id="praiseTabContent" class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="praiseStudio" aria-labelledby="praiseStudioTab">
+                                    <div class="viewpoint-list" scroll-refresh="investPointQryForUpvote(1,{{bll.investPerformQry.what.result.userId}},{{bll.investPerformQry.what.params.tenantId}})">
+                                        <ul ng-repeat="vPoint in bll.investPointQryForUpvote.what.stu_result">
+                                            <li class="viewpoint-list-item">
+                                                <!--<span class="viewpoint-title">{{vPoint.pointTopic}}</span>-->
+                                                <!--<span class="read-num">{{vPoint.upvoteNum}}</span>-->
+                                                <!--<span class="publish-time">{{vPoint.pubTime | toDate}}</span>-->
+                                                <span class="viewpoint-title" ng-show="vPoint.pointTopic.length>10"  title="{{vPoint.pointTopic}}">
+                                                    {{vPoint.pointTopic.substring(0,5)}}.....{{vPoint.pointTopic.substring(vPoint.pointTopic.length-5,vPoint.pointTopic.length)}}
+                                                </span>
+                                                <span class="viewpoint-title" ng-show="vPoint.pointTopic.length<=10">
+                                                    {{vPoint.pointTopic}}
+                                                </span>
+                                                <span class="viewpoint-title broker-color" ng-show="vPoint.pointTopic==null">
+                                                    {{"(无主题)"}}
+                                                </span>
+                                                <span class="read-num" ng-show="vPoint.upvoteNum!=null">{{vPoint.upvoteNum}}{{"赞同"}}</span>
+                                                <span class="read-num broker-color" ng-show="vPoint.upvoteNum==null">
+                                                    {{"(无点赞数)"}}
+                                                </span>
+                                                <span class="publish-time" ng-show="vPoint.pubTime!=null">{{vPoint.pubTime | toDate}}</span>
+                                                <span class="publish-time broker-color" ng-show="vPoint.pubTime==null">
+                                                    {{"(无时间)"}}
+                                                </span>
+                                            </li>
+                                        </ul>
+                                        <small ng-if="!bll.investPointQryForUpvote.what.stu_result.length>0" class="data-miss">暂无数据</small>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="praiseLtb" aria-labelledby="praiseLtbTab">
+                                    <div class="viewpoint-list" scroll-refresh="investPointQryForUpvote(2,{{bll.investPerformQry.what.result.userId}},{{bll.investPerformQry.what.params.tenantId}})">
+                                        <ul ng-repeat="lPoint in bll.investPointQryForUpvote.what.ltb_result">
+                                            <li class="viewpoint-list-item">
+                                                <!--<span class="viewpoint-title">{{vPoint.pointTopic}}</span>-->
+                                                <!--<span class="read-num">{{vPoint.upvoteNum}}</span>-->
+                                                <!--<span class="publish-time">{{vPoint.pubTime | toDate}}</span>-->
+                                                <span class="viewpoint-title" ng-show="lPoint.pointTopic.length>10"  title="{{lPoint.pointTopic}}">
+                                                    {{lPoint.pointTopic.substring(0,5)}}.....{{lPoint.pointTopic.substring(lPoint.pointTopic.length-5,lPoint.pointTopic.length)}}
+                                                </span>
+                                                <span class="viewpoint-title" ng-show="lPoint.pointTopic.length<=10">
+                                                    {{lPoint.pointTopic}}
+                                                </span>
+                                                <span class="viewpoint-title broker-color" ng-show="lPoint.pointTopic==null">
+                                                    {{"(无主题)"}}
+                                                </span>
+                                                <span class="read-num" ng-show="lPoint.upvoteNum!=null">{{lPoint.upvoteNum}}{{"赞同"}}</span>
+                                                <span class="read-num broker-color" ng-show="lPoint.upvoteNum==null">
+                                                    {{"(无点赞数)"}}
+                                                </span>
+                                                <span class="publish-time" ng-show="lPoint.pubTime!=null">{{lPoint.pubTime | toDate}}</span>
+                                                <span class="publish-time broker-color" ng-show="lPoint.pubTime==null">
+                                                    {{"(无时间)"}}
+                                                </span>
+                                            </li>
+                                        </ul>
+                                        <small ng-if="!bll.investPointQryForUpvote.what.ltb_result.length>0" class="data-miss">暂无数据</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-primary-green" data-dismiss="modal">确认</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--搜索结果弹窗-->
+    <div class="common-module-modal search-result-modal modal fade" id="searchResult" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-center">
+            <div class="modal-dialog">
+                <div class="modal-content modal-show-position">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="iconfont icon icon-close"></i></button>
+                        <h4 class="modal-title">系统提示</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="search-result">抱歉，未搜索到相关信息！</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-big-green" data-dismiss="modal">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

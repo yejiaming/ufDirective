@@ -1,0 +1,9 @@
+<i ng-click="warpCallback('itemClicked', item, $event);" class="{{getItemIcon(item)}}"></i>
+<i class="iconfont " style="color:#4ABD4E"
+   ng-class="{'icon-2':(item.$isIcon==1 ||item.$isIcon== undefined),'icon-1':(item.$isIcon ==2),'icon-3':(item.$isIcon ==3)}"
+   ng-click="changeItemIcon(item)"></i>
+<span ng-show="isShowMenuId &&(item[funcField] || item[menuId])">{{item[funcField] || item[menuId]}}</span>
+<span class='text-field' ng-click="warpCallback('itemClicked', item, $event);">{{item[textField] || item[funcName]}}</span>
+<ul ng-if="isLeaf(item)" ng-show="item.$isExpend">
+    <li  ng-repeat="item in item.children" ng-include="itemTemplateUrl || 'template/treeItem.html'"></li>
+</ul>

@@ -1,0 +1,9 @@
+<a href="" ng-click="warpCallback('itemClicked', item,$event);"
+   ng-class="{'left-active':item[id] === menuId}">
+    <i class="first-img" ng-show="item.children" ng-class="getIconCallBack('getIcon',item)"></i>
+    <span ng-bind="item[textField]"></span>
+    <img class="second-img" ng-show="item.children" ng-src="{{getItemIcon(item)}}">
+</a>
+<ul class="sub-menu-list" ng-if="isLeaf(item)" ng-show="item.$isExpend">
+    <li ng-repeat="item in item.children" ng-include="itemTemplateUrl || 'template/menuItem.html'"></li>
+</ul>

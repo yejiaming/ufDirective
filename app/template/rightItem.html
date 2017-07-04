@@ -1,0 +1,13 @@
+<!--<i ng-click="warpCallback(item, $event);" class="{{getItemIcon(item)}}" style="padding-right: 6px"></i>-->
+<img src="{{getItemIcon(item,$first,$middle,$last)}}" ng-click="warpCallback(item, $event);" style="">
+<i class="iconfont " style="color:#4ABD4E;font-size: 18px;display: inline-block;
+    vertical-align: middle;margin-left: -5px;" ng-if="isRightTree"
+   ng-class="getRightIcon(item)"
+   ng-click="changeItemIcon('changeRight',item)"></i>
+<i id="wenjianjia" ng-if="!isRightTree" class="iconfont " style="color:#8ca0ab;font-size: 18px;display: inline-block;
+    vertical-align: middle;margin-left: -5px;" ng-if="isRightTree"
+   ng-class="{'icon-wenjianjia':item.$isExpend,'icon-wenjianjia1':!item.$isExpend}"></i>
+<span id={{showField(item)}} class='text-field' ng-click="getItemCallback('itemClicked', item);" ng-class="{'red':isChange === item[id]}">{{showField(item)}}</span>
+<ul ng-if="isLeaf(item) && (item.$isExpend || isLoaded(item))" ng-show="item.$isExpend" ng-class="{'line':! $last}">
+    <li  ng-repeat="item in item[children]" ng-include="itemTemplateUrl || 'template/rightItem.html'"></li>
+</ul>

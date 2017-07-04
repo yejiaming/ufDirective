@@ -1,0 +1,78 @@
+<!--编辑用户信息弹窗-->
+    <div class="modal-center">
+        <div class="modal-dialog">
+            <div class="modal-content positio-center user-center-content change-modal-position">
+                <div class="modal-header">
+                    <button type="button" class="close" ng-click="showData.cancel()"><i class="iconfont icon icon-close"></i></button>
+                    <h4 class="modal-title">{{showData.modalTitle}}</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="edit-info-form">
+                            <div class="form-group change-form-group">
+                                <label class="form-label" for="name">姓名：</label>
+                                <input class="form-input" type="text" id="name"
+                                       ng-model="operatorName"
+                                       ng-init="showData.setParam(4,showData.modalContent.operatorName)"
+                                       ng-value="showData.modalContent.operatorName"
+                                       ng-change="showData.setParam(4,operatorName)"
+                                       maxlength="20">
+                            </div>
+                            <div class="form-group change-form-group">
+                                <label class="form-label" for="mobile">手机号：</label>
+                                <input class="form-input" type="text" id="mobile" value="{{showData.modalContent.operatorTel}}"
+                                       ng-init="showData.setParam(0,showData.modalContent.operatorTel)"
+                                       readonly="readonly">
+                            </div>
+                            <div class="form-group change-form-group float-box mobile-new-box">
+                                <label class="form-label" for="mobile_new">新手机号码：</label>
+                                <div class="form-input-box">
+                                    <input class="form-input" type="text" id="mobile_new" placeholder="输入新手机号"
+                                        ng-model="moblieNo"
+                                        onkeyup="this.value=this.value.replace(/\D/g,'')"
+                                        onafterpaste="this.value=this.value.replace(/\D/g,'')"
+                                        ng-blur="showData.callSomeFunction(1)"
+                                        ng-change="showData.setParam(1,moblieNo)"
+                                        maxlength="11">
+                                    <p class="mobile-new-tip">Tips:修改手机后账号为新手机号。</p>
+                                </div>
+                            </div>
+                            <div class="form-group change-form-group float-box">
+                                <label class="form-label" for="verifycode">验证码：</label>
+                                <div class="form-input-box">
+                                    <input class="form-input verify-code-input" type="text" id="verifycode"
+                                           ng-model="verifyCodeInput"
+                                           maxlength="10"
+                                           placeholder="输入验证码"
+                                    ng-change="showData.setParam(3,verifyCodeInput)">
+                                    <span class="btn-verifycode" ng-click="showData.callSomeFunction(0)"
+                                        ng-if="!remainTimeSeconds && remainTimeSeconds != 0 && !remainGet" ng-init="remainGet=false">获取</span>
+                                    <span class="btn-verifycode"
+                                          ng-if="remainTimeSeconds" ng-init="remainGet=true">{{remainTimeSeconds}}s</span>
+                                    <span class="btn-verifycode" ng-click="showData.callSomeFunction(0)"
+                                          ng-if="remainTimeSeconds == 0">重新获取</span>
+                                </div>
+                            </div>
+                            <!--<div class="form-group change-form-group">-->
+                                <!--<label class="form-label" for="title">职位：</label>-->
+                                <!--<input class="form-input" type="text" id="title" value="投顾主管" readonly="readonly">-->
+                            <!--</div>-->
+                            <div class="form-textarea">
+                                <label class="textarea-label" for="remark">备注：</label>
+                                <textarea class="textarea-input" id="remark" ng-model="remark"
+                                          maxlength="1000"
+                                          ng-init="remark = showData.modalContent.remark"
+                                          ng-value="showData.modalContent.remark"
+                                          ng-change="showData.setParam(2,remark)"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <div class="btn-box">
+                        <a class="btn-big-green" ng-click="showData.submit(3)">确定</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

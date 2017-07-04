@@ -1,0 +1,164 @@
+<div  class="bgContainer business-consultant-detail">
+    <div class="common-module-container">
+        <div class="tab-content">
+            <h2 class="content-title">投顾详情</h2>
+            <div class="detail-info-content">
+                <h3 class="detail-info-item">个人基本信息</h3>
+                <div class="detail-info-box">
+                    <dl class="detail-info-group">
+                        <dt class="detail-info-title"><em class="required-item">*</em>申请人姓名：</dt>
+                        <a title="{{finalResult.applicantName}}">
+                            <dd class="detail-info-text " ng-show="finalResult.applicantName.length>10">
+                                {{finalResult.applicantName.substring(0,5)}}...{{finalResult.applicantName.substring(finalResult.applicantName.length-5,finalResult.applicantName.length)}}
+                            </dd>
+                            <dd class="detail-info-text" ng-show="finalResult.applicantName.length<=10">{{finalResult.applicantName}}</dd>
+                        </a>
+                    </dl>
+                    <dl class="detail-info-group">
+                        <dt class="detail-info-title"><em class="required-item">*</em>身份证号码：</dt>
+                        <dd class="detail-info-text">{{finalResult.idCardNo}}</dd>
+                    </dl>
+                    <dl class="detail-info-group">
+                        <dt class="detail-info-title">微博号：</dt>
+                        <a title="{{finalResult.weiboNo}}">
+                            <dd class="detail-info-text " ng-show="finalResult.weiboNo.length>14">
+                                {{finalResult.weiboNo.substring(0,5)}}...{{finalResult.weiboNo.substring(finalResult.weiboNo.length-5,finalResult.weiboNo.length)}}
+                            </dd>
+                            <dd class="detail-info-text" ng-show="finalResult.weiboNo.length<=14">{{finalResult.weiboNo}}</dd>
+                        </a>
+                        <!--<dd class="detail-info-text">{{finalResult.weiboNo}}</dd>-->
+                    </dl>
+                    <dl class="detail-info-group">
+                        <dt class="detail-info-title"><em class="required-item">*</em>微信公众号：</dt>
+                        <dd class="detail-info-text " ng-show="finalResult.weixinNo.length>20" title="{{finalResult.weixinNo}}">
+                            {{finalResult.weixinNo.substring(0,5)}}...{{finalResult.weixinNo.substring(finalResult.weixinNo.length-5,finalResult.weixinNo.length)}}
+                        </dd>
+                        <dd class="detail-info-text" ng-show="finalResult.weixinNo.length<=20" title="{{finalResult.weixinNo}}">{{finalResult.weixinNo}}</dd>
+                    </dl>
+                    <dl class="detail-info-group">
+                        <dt class="detail-info-title">QQ号：</dt>
+                        <dd class="detail-info-text">{{finalResult.qqNo}}</dd>
+                    </dl>
+                    <dl class="detail-info-group">
+                        <dt class="detail-info-title">微信账户主体：</dt>
+                        <dd class="detail-info-text">{{finalResult.weixinOwner}}</dd>
+                    </dl>
+                    <dl class="detail-info-group">
+                        <dt class="detail-info-title">用户昵称：</dt>
+                        <dd class="detail-info-text">{{finalResult.aliasName}}</dd>
+                    </dl>
+                    <dl class="detail-info-group">
+                        <dt class="detail-info-title"><em class="required-item">*</em>手机号：</dt>
+                        <dd class="detail-info-text">{{finalResult.mobile}}</dd>
+                    </dl>
+                </div>
+                <h3 class="detail-info-item">资质信息</h3>
+                <div class="detail-info-box">
+                    <dl class="detail-info-group">
+                        <dt class="detail-info-title"><em class="required-item">*</em>投顾类型：</dt>
+                        <dd class="detail-info-text">{{finalResult.adviserTypeName}}</dd>
+                    </dl>
+                    <dl class="detail-info-group">
+                        <dt class="detail-info-title" ng-bind-html="stateElement.html_qualification_1">资格证书号：</dt>
+                        <dd class="detail-info-text">{{finalResult.credentialsNo}}</dd>
+                    </dl>
+                    <dl class="detail-info-group">
+                        <dt class="detail-info-title" ng-bind-html="stateElement.html_qualification_2">资格证书类型：</dt>
+                        <dd class="detail-info-text">{{finalResult.credentialsType}}</dd>
+                    </dl>
+                </div>
+                <h3 class="detail-info-item">公司信息</h3>
+                <div class="detail-info-box">
+                    <dl class="detail-info-group">
+                        <dt class="detail-info-title">公司名称：</dt>
+                        <!--<dd class="detail-info-text">{{finalResult.companyName}}</dd>-->
+                        <a title="{{finalResult.companyName}}">
+                            <dd class="detail-info-text " ng-show="finalResult.companyName.length>12">
+                                {{finalResult.companyName.substring(0,5)}}...{{finalResult.companyName.substring(finalResult.companyName.length-5,finalResult.companyName.length)}}
+                            </dd>
+                            <dd class="detail-info-text" ng-show="finalResult.companyName.length<=12">{{finalResult.companyName}}</dd>
+                        </a>
+                    </dl>
+                    <dl class="detail-info-group">
+                        <dt class="detail-info-title">所在省：</dt>
+                        <dd class="detail-info-text">{{finalResult.provinceName}}</dd>
+                    </dl>
+                    <dl class="detail-info-group">
+                        <dt class="detail-info-title">租户ID：</dt>
+                        <dd class="detail-info-text">{{finalResult.tenantId}}</dd>
+                    </dl>
+                    <dl class="detail-info-group">
+                        <dt class="detail-info-title">员工编号：</dt>
+                        <dd class="detail-info-text">{{finalResult.employeeNo}}</dd>
+                    </dl>
+                    <dl class="detail-info-group">
+                        <dt class="detail-info-title">所在市：</dt>
+                        <dd class="detail-info-text">{{finalResult.cityName}}</dd>
+                    </dl>
+                    <dl class="detail-info-group">
+                        <dt class="detail-info-title">银行账号：</dt>
+                        <dd class="detail-info-text">{{finalResult.bankAccount}}</dd>
+                    </dl>
+                    <dl class="detail-info-group">
+                        <dt class="detail-info-title"><em class="required-item">*</em>从业年限：</dt>
+                        <dd class="detail-info-text">{{finalResult.workYear}}</dd>
+                    </dl>
+                    <dl class="detail-info-group">
+                        <dt class="detail-info-title">所属机构：</dt>
+                        <dd class="detail-info-text">{{finalResult.organization}}</dd>
+                    </dl>
+                    <dl class="detail-info-group">
+                        <dt class="detail-info-title"><em class="required-item">*</em>邮箱地址：</dt>
+                        <!--<dd class="detail-info-text">{{finalResult.email}}</dd>-->
+                        <a title="{{finalResult.email}}">
+                            <dd class="detail-info-text " ng-show="finalResult.email.length>20">
+                                {{finalResult.email.substring(0,5)}}.....{{finalResult.email.substring(finalResult.email.length-5,finalResult.email.length)}}
+                            </dd>
+                            <dd class="detail-info-text" ng-show="finalResult.email.length<=20">{{finalResult.email}}</dd>
+                        </a>
+                    </dl>
+                    <dl class="detail-info-group">
+                        <dt class="detail-info-title"><em class="required-item">*</em>营业部：</dt>
+                        <dd class="detail-info-text">{{finalResult.businessDept}}</dd>
+                    </dl>
+                    <dl class="detail-info-group">
+                        <dt class="detail-info-title">开户人：</dt>
+                        <dd class="detail-info-text">{{finalResult.accountHolder}}</dd>
+                    </dl>
+                    <dl class="detail-info-group">
+                        <dt class="detail-info-title">开户行：</dt>
+                        <dd class="detail-info-text">{{finalResult.openingBank}}</dd>
+                    </dl>
+                    <dl class="detail-info-group">
+                        <dt class="detail-info-title">推荐码：</dt>
+                        <dd class="detail-info-text">{{finalResult.referralCode}}</dd>
+                    </dl>
+                </div>
+                <h3 class="detail-info-item">其他信息</h3>
+                <div class="detail-info-box">
+                    <dl class="detail-info-group remarks-box">
+                        <dt class="detail-info-title">投资风格：</dt>
+                        <dd class="detail-info-text">{{finalResult.investmentStyle}}</dd>
+                    </dl>
+                    <dl class="detail-info-group remarks-box">
+                        <dt class="detail-info-title">投资策略：</dt>
+                        <dd class="detail-info-text">{{finalResult.investmentStrategy}}</dd>
+                    </dl>
+                    <dl class="detail-info-group remarks-box">
+                        <dt class="detail-info-title">投资策略简述：</dt>
+                        <dd class="detail-info-text">{{finalResult.investmentStrategySummary}}</dd>
+                    </dl>
+                    <dl class="detail-info-group remarks-box">
+                        <dt class="detail-info-title">背景介绍：</dt>
+                        <dd class="detail-info-text">{{finalResult.backgroundIntro}}</dd>
+                    </dl>
+                </div>
+
+                <div class="btn-box">
+                    <a class="btn-primary-gray" href="#/broker">返回</a>
+                    <a class="btn-primary-green btn-edit" href="#/addNewConsultant/1">编辑</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

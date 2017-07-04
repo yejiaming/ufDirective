@@ -1,0 +1,38 @@
+
+    <div class="modal-center">
+        <div class="modal-dialog">
+            <div class="user-center-content fix-center">
+                <div class="modal-header">
+                    <button type="button" class="close" ng-click="showData.cancel()"><i class="iconfont icon icon-close"></i></button>
+                    <h4 class="modal-title">{{showData.modalTitle}}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="detail-info-box">
+                        <dl class="detail-info-group">
+                            <dt class="detail-info-title">姓名：</dt>
+                            <dd class="detail-info-text">{{showData.modalContent.operatorName}}</dd>
+                        </dl>
+                        <dl class="detail-info-group">
+                            <dt class="detail-info-title">手机号：</dt>
+                            <dd class="detail-info-text">{{showData.modalContent.operatorTel}}</dd>
+                        </dl>
+                        <!--<dl class="detail-info-group">-->
+                            <!--<dt class="detail-info-title">类型：</dt>-->
+                            <!--<dd class="detail-info-text">投顾主管</dd>-->
+                        <!--</dl>-->
+                        <dl class="detail-info-group">
+                            <dt class="detail-info-title">备注：</dt>
+                            <dd class="detail-info-text" ng-if="showData.modalContent.remark == undefined || showData.modalContent.remark == null  || showData.modalContent.remark.length == 0 || showData.modalContent.remark == ''">这个人很懒，什么都没留下！</dd>
+                            <dd class="detail-info-text" ng-if="!showData.modalContent.remark != undefined && showData.modalContent.remark != null  && showData.modalContent.remark.length != 0 && showData.modalContent.remark != ''">{{showData.modalContent.remark}}</dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="btn-box">
+                        <a class="btn-primary-green" ng-click="showData.submit(0)">编辑</a>
+                        <a class="more-link" ng-click="showData.submit(1)">修改登录密码</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

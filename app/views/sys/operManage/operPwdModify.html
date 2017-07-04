@@ -1,0 +1,60 @@
+<div ng-controller="operPwdModifyCtrl" class="bgContainer">
+    <div class="row">
+        <!--<div class="top-line"></div>-->
+        <div class="panel-body border-reset">
+            <form role="form" class="form-horizontal" name="operPwdModForm" novalidate>
+                <div class="form-group">
+                    <label class="col-sm-1 control-label res-control-label text-right" style="width: 100px"><span class="red">*</span>旧 密
+                        码：</label>
+                    <div class="col-sm-3 ">
+                        <input name="oldPassword" type="password" maxlength="20" class="form-control input-sm"
+                               placeholder="请输入..."
+                               ng-model="bll.oldPassword" ng-focus="true" required>
+                        <div class="error" ng-messages="operPwdModForm.oldPassword.$error" style="padding-left: 30px"
+                             ng-if="!operPwdModForm.oldPassword.$focused&&!operPwdModForm.oldPassword.$isInit">
+                            <div ng-message="required" class="red">旧密码为必填项</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-1  control-label res-control-label text-right" style="width: 100px"><span class="red">*</span>新
+                        密
+                        码：</label>
+                    <div class="col-sm-3 ">
+                        <input name="newPassword" type="password" maxlength="20" class="form-control input-sm" placeholder="请输入..."
+                               ng-model="bll.newPassword" ng-focus="true" required>
+                        <div class="error" ng-messages="operPwdModForm.newPassword.$error" style="padding-left: 30px"
+                             ng-if="!operPwdModForm.newPassword.$focused&&!operPwdModForm.newPassword.$isInit">
+                            <div ng-message="required" class="red" style=" padding-left: 33px;">新密码为必填项</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-1  control-label res-control-label text-right" style="width: 100px"><span
+                            class="red">*</span>密码校验：</label>
+                    <div class="col-sm-3" style="padding-right: 8px;">
+                        <input name="checkPwd" type="password" maxlength="20" class="form-control input-sm" placeholder="请输入..."
+                               ng-model="bll.checkPwd" ng-focus="true" required>
+                        <div class="error" ng-messages="operPwdModForm.checkPwd.$error" style="padding-left: 30px"
+                             ng-if="!operPwdModForm.checkPwd.$focused&&!operPwdModForm.checkPwd.$isInit">
+                            <div ng-message="required" class="red"
+                                 ng-hide="bll.newPassword == null && bll.checkPwd == null" style="padding-left: 33px;">
+                                密码校验为必填项
+                            </div>
+                            <div ng-if="bll.checkPwd !=bll.newPassword&&bll.newPassword!=null&&bll.checkPwd!=null&&bll.checkPwd!=''" class="red">两次密码输入不一致</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-1 control-label res-control-label"></label>
+                    <div class="col-sm-3" style="margin-left: 85px">
+                        <a class="query-button pull-right" type="ng-submit" button-rights="33"
+                           ng-click="sub()">
+                            保存
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

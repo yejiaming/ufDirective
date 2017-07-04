@@ -1,0 +1,411 @@
+<div ng-controller="customerSetCtrl" class="bgContainer page-customer">
+    <div class="common-module-container business-customer-management">
+        <ul id="myTab" class="tab-label" role="tablist">
+            <li role="presentation" class="tab-item active">
+                <a href="#whiteLists" ng-click="sheetChange(0)" id="whiteListsTab" role="tab" data-toggle="tab" aria-controls="whiteLists" aria-expanded="false">正常客户</a>
+            </li>
+            <li role="presentation" class="tab-item">
+                <a href="#blackLists" ng-click="sheetChange(1)" id="blackListTab" role="tab"  data-toggle="tab" aria-controls="blackLists" aria-expanded="true">限制客户</a>
+            </li>
+        </ul>
+        <div id="myTabContent" class="tab-content">
+            <div role="tabpanel" class="tab-pane active {{hideInvest}}" id="whiteLists" aria-labelledby="whiteListsTab">
+                <div class="content-head">
+                    <h2 class="content-title">角色列表</h2>
+                    <div class="search-content">
+                        <form class="form-content" method="get" role="search">
+                            <div class="search-box">
+                                <label for="search">搜索客户</label>
+                                <input class="input-search" type="text" maxlength="20" id="search" ng-model="searchCustomer" placeholder="">
+                                <button class="iconfont icon icon-search" type="submit" title="搜索客户" ng-click="searchByKey(0)"></button>
+                            </div>
+                        </form>
+                        <div class="button-box">
+                            <button class="btn-primary-green" type="button" data-toggle="modal" data-target="#exportExcelModal" ng-click="excelReport(0)">导出</button>
+                            <button type="button" data-toggle="modal" data-target="#disableSendmsg"
+                                    ng-hide="bll.resultWhite.length<=0"
+                                    ng-class="{true: 'btn-primary-green', false: 'btn-primary-red'}[bll.customerInfoWhite.sendmsg_status==1]"
+                                    ng-click="sendmsgStatus(bll.customerInfoWhite.userId,bll.customerInfoWhite.sendmsg_status)">{{bll.customerInfoWhite.button_title}}</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-wrap normal-content">
+                    <div class="adviser-list-content" id="excelReport">
+                        <div class="list-head">
+                            <span class="list-item w30">客户昵称</span>
+                            <span class="list-item w40">手机号码</span>
+                            <span class="list-item w30">归属</span>
+                        </div>
+                        <div class="list-content list-link">
+                            <ul>
+                                <!-- ng-class="{true: 'js-selected',false: ''}[$index == 0]"-->
+                                <li ng-class="{true: 'js-selected',false: ''}[$index == 0]"  ng-repeat="x in bll.resultWhite" change-tr-style="js-selected" ng-click="performQry(x, 0,$index)">
+                                    <!--<div class="list-item w30">-->
+
+                                        <span class="list-item adviser-name w20" title="{{x.alias_name}}">{{x.alias_name}}</span>
+                                        <span class="iconfont icon-jinyan list-item w10"  ng-show="bll.resultWhite[$index].sendmsg_status==1"></span>
+                                        <span class="list-item w10" ng-show="bll.resultWhite[$index].sendmsg_status!=1" ></span>
+                                    <!--</div>-->
+                                    <span class="list-item w40">{{x.mobile}}</span>
+                                    <span class="list-item adviser-department w30" title="{{x.tenant_id | tenantIdToName}}">{{x.tenant_id | tenantIdToName}}</span>
+                                    <span class="arr"></span>
+                                </li>
+                            </ul>
+                            <small ng-if="!bll.resultWhite.length>0" class="data-miss">暂无数据</small>
+                        </div>
+                        <div class="text-right">
+                            <uib-pagination total-items="paginationWhite.total_items" previous-text="上一页"
+                                            items-per-page="bll.qryParamsWhite.pageSize" next-text="下一页"
+                                            ng-model="bll.qryParamsWhite.pageNo"
+                                            max-size="5" class="pagination-sm"
+                                            ng-change="paginationWhite.pageChange()"
+                                            boundary-link-numbers="true" rotate="false"></uib-pagination>
+                        </div>
+                    </div>
+                    <div class="adviser-info-content">
+                        <div class="adviser-info-head">
+                            <img class="adviser-avatar" ng-src={{bll.customerInfoWhite.picUrl}} onerror="this.src='images/avatar.png'" alt="{{bll.customerInfoWhite.userName}}">
+                            <p class="adviser-introduce"><strong class="adviser-name">{{bll.customerInfoWhite.userName}}</strong><span class="adviser-type"></span><i class="adviser-status">正常</i></p>
+                            <div class="adviser-info-box">
+                                <dl class="info-group">
+                                    <dt class="info-title">归属：</dt>
+                                    <dd class="info-text">{{bll.customerInfoWhite.tenantId | tenantIdToName}}</dd>
+                                </dl>
+                                <dl class="info-group">
+                                    <dt class="info-title">手机号：</dt>
+                                    <dd class="info-text">{{bll.customerInfoWhite.telephone}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="adviser-info-item">
+                            <div class="item-title-box"><h3 class="adviser-info-title">绩效情况</h3></div>
+                            <div class="adviser-info-box">
+                                <dl class="info-group">
+                                    <dt class="info-title">提问数：</dt>
+                                    <dd class="info-text">{{bll.performInfo.askNum}}</a></dd>
+                                </dl>
+                                <dl class="info-group">
+                                    <dt class="info-title">评论数：</dt>
+                                    <dd class="info-text">{{bll.performInfo.commentNum}}</dd>
+                                </dl>
+                                <dl class="info-group">
+                                    <dt class="info-title">点赞数：</dt>
+                                    <dd class="info-text">{{bll.performInfo.upvoteNum}}</dd>
+                                </dl>
+                                <dl class="info-group">
+                                    <dt class="info-title">参与直播数：</dt>
+                                    <dd class="info-text">{{bll.performInfo.liveNum}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="adviser-info-item">
+                            <div class="item-title-box"><h3 class="adviser-info-title">订阅历史</h3><button class="more-detail" data-toggle="modal" data-target="#subscriptionHistoryModal" type="button" ng-click="subQry(bll.customerInfoWhite.userId,bll.customerInfoWhite.tenantId,5)">+更多</button></div>
+                            <table class="adviser-info-table" cellpadding="0" cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th class="w33">组合名称</th>
+                                    <th class="w33">投顾昵称</th>
+                                    <th class="w33">订阅日期</th></tr>
+                                </thead>
+                                <tbody ng-repeat="x in bll.subInfo">
+                                <tr>
+                                    <td>{{x.combiName}}</td>
+                                    <td>{{x.adviserName}}</td>
+                                    <td>{{x.subTime | formatStrToDate}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--<div class="adviser-info-item">
+                            <div class="item-title-box"><h3 class="adviser-info-title">优惠卷使用</h3><button class="more-detail" data-toggle="modal" data-target="#couponModal" type="button" ng-click="couponQry(bll.customerInfoWhite.userId,5)">+更多</button></div>
+                            <table class="adviser-info-table" cellpadding="0" cellspacing="0">
+                                <thead>
+                                <tr><th class="w50">优惠卷名称</th><th class="w50">使用日期</th></tr>
+                                </thead>
+                                <tbody ng-repeat="x in bll.couponInfo">
+                                <tr>
+                                    <td>{{x.couponName}}</td>
+                                    <td>{{x.useTime}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>-->
+                        <div class="adviser-info-item">
+                            <div class="item-title-box"><h3 class="adviser-info-title">签约历史</h3><button class="more-detail" data-toggle="modal" data-target="#signModal" type="button" ng-click="signQry(bll.customerInfoWhite.userId,bll.customerInfoWhite.tenantId,5)">+更多</button></div>
+                            <table class="adviser-info-table" cellpadding="0" cellspacing="0">
+                                <thead>
+                                <tr><th class="w50">订阅投顾</th><th class="w50">有效期</th></tr>
+                                </thead>
+                                <tbody ng-repeat="x in bll.signInfo">
+                                <tr>
+                                    <td>{{x.adviserName}}</td>
+                                    <td>{{x.validTime | formatStrToDate}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="btn-box">
+                            <button class="btn-primary-green" type="button" ng-hide="bll.resultWhite.length<=0" ng-click="frozen(bll.customerInfoWhite.userId)">限制</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane {{hideLimitInvest}}" id="blackLists" aria-labelledby="blackListsTab">
+                <div class="content-head">
+                    <h2 class="content-title">角色列表</h2>
+                    <div class="search-content">
+                        <form class="form-content" method="get" role="search">
+                            <div class="search-box">
+                                <label for="search">搜索客户</label>
+                                <input class="input-search" type="text" maxlength="20" id="search" ng-model="searchCustomer1" placeholder="">
+                                <button class="iconfont icon icon-search" type="submit" title="搜索客户" ng-click="searchByKey(1)"></button>
+                            </div>
+                        </form>
+                        <div class="button-box">
+                            <button class="btn-primary-green" type="button" data-toggle="modal" data-target="#exportExcelModal" ng-click="excelReport(1)">导出</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-wrap abnormal-content">
+                    <div class="adviser-list-content">
+                        <div class="list-head">
+                            <span class="list-item w30">客户昵称</span>
+                            <span class="list-item w40">手机号码</span>
+                            <span class="list-item w30">归属</span>
+                        </div>
+                        <div class="list-content list-link">
+                            <ul>
+                                <li ng-class="{true: 'js-selected',false: ''}[$index == 0]" ng-click="performQry(x, 1)" change-tr-style="js-selected" ng-repeat="x in bll.resultBlack">
+                                    <span class="list-item adviser-name w30">{{x.alias_name}}</span>
+                                    <span class="list-item w40">{{x.mobile}}</span>
+                                    <span class="list-item adviser-department w30">{{x.tenant_id | tenantIdToName}}</span>
+                                    <span class="arr"></span>
+                                </li>
+                            </ul>
+                            <small ng-if="!bll.resultBlack.length>0" class="data-miss">暂无数据</small>
+                        </div>
+                        <div class="text-right">
+                            <uib-pagination total-items="paginationBlack.total_items" previous-text="上一页"
+                                            items-per-page="bll.qryParamsBlack.pageSize" next-text="下一页"
+                                            ng-model="bll.qryParamsBlack.pageNo"
+                                            max-size="5" class="pagination-sm"
+                                            ng-change="paginationBlack.pageChange()"
+                                            boundary-link-numbers="true" rotate="false"></uib-pagination>
+                        </div>
+                    </div>
+                    <div class="adviser-info-content">
+                        <div class="adviser-info-head">
+                            <img class="adviser-avatar" ng-src="{{bll.customerInfoBlack.picUrl}}" onerror="this.src='images/avatar.png'" alt="{{bll.customerInfoBlack.userName}}">
+                            <p class="adviser-introduce"><strong class="adviser-name">{{bll.customerInfoBlack.userName}}</strong><span class="adviser-type"></span><i class="adviser-status status-limit">限制</i></p>
+                            <div class="adviser-info-box">
+                                <dl class="info-group">
+                                    <dt class="info-title">归属：</dt>
+                                    <dd class="info-text">{{bll.customerInfoBlack.tenantId | tenantIdToName}}</dd>
+                                </dl>
+                                <dl class="info-group">
+                                    <dt class="info-title">手机号：</dt>
+                                    <dd class="info-text">{{bll.customerInfoBlack.telephone}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="adviser-info-item">
+                            <div class="item-title-box"><h3 class="adviser-info-title">绩效情况</h3></div>
+                            <div class="adviser-info-box">
+                                <dl class="info-group">
+                                    <dt class="info-title">提问数：</dt>
+                                    <dd class="info-text">{{bll.performInfo.askNum}}</a></dd>
+                                </dl>
+                                <dl class="info-group">
+                                    <dt class="info-title">评论数：</dt>
+                                    <dd class="info-text">{{bll.performInfo.commentNum}}</dd>
+                                </dl>
+                                <dl class="info-group">
+                                    <dt class="info-title">点赞数：</dt>
+                                    <dd class="info-text">{{bll.performInfo.upvoteNum}}</dd>
+                                </dl>
+                                <dl class="info-group">
+                                    <dt class="info-title">参与直播数：</dt>
+                                    <dd class="info-text">{{bll.performInfo.liveNum}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="adviser-info-item">
+                            <div class="item-title-box"><h3 class="adviser-info-title">订阅历史</h3><button class="more-detail" data-toggle="modal" data-target="#subscriptionHistoryModal" type="button" ng-click="subQry(bll.customerInfoBlack.userId,bll.customerInfoBlack.tenantId,5)">+更多</button></div>
+                            <table class="adviser-info-table" cellpadding="0" cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th class="w33">组合名称</th>
+                                    <th class="w33">投顾昵称</th>
+                                    <th class="w33">订阅日期</th></tr>
+                                </thead>
+                                <tbody ng-repeat="x in bll.subInfo">
+                                <tr>
+                                    <td>{{x.combiName}}</td>
+                                    <td>{{x.adviserName}}</td>
+                                    <td>{{x.subTime | formatStrToDate}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--<div class="adviser-info-item">
+                            <div class="item-title-box"><h3 class="adviser-info-title">优惠卷使用</h3><button class="more-detail" data-toggle="modal" data-target="#couponModal" type="button">+更多</button></div>
+                            <table class="adviser-info-table" cellpadding="0" cellspacing="0">
+                                <thead>
+                                <tr><th class="w50">优惠卷名称</th><th class="w50">使用日期</th></tr>
+                                </thead>
+                                <tbody ng-repeat="x in bll.couponInfo">
+                                <tr>
+                                    <td>{{x.couponName}}</td>
+                                    <td>{{x.useTime}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>-->
+                        <div class="adviser-info-item">
+                            <div class="item-title-box"><h3 class="adviser-info-title">签约历史</h3><button class="more-detail" data-toggle="modal" data-target="#signModal" type="button" ng-click="signQry(bll.customerInfoBlack.userId,bll.customerInfoBlack.tenantId,5)">+更多</button></div>
+                            <table class="adviser-info-table" cellpadding="0" cellspacing="0">
+                                <thead>
+                                <tr><th class="w50">订阅投顾</th><th class="w50">有效期</th></tr>
+                                </thead>
+                                <tbody ng-repeat="x in bll.signInfo">
+                                <tr>
+                                    <td>{{x.adviserName}}</td>
+                                    <td>{{x.validTime | formatStrToDate}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="btn-box">
+                            <button class="btn-primary-green" type="button" ng-hide="bll.resultBlack.length<=0" ng-click="unFrozen(bll.customerInfoBlack.userId)">解除限制</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--订阅历史详情弹窗-->
+    <div class="common-module-modal more-detail-modal modal fade" id="subscriptionHistoryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-center">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="iconfont icon icon-close"></i></button>
+                        <h4 class="modal-title">订阅历史详情</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="content-head"><h2 class="content-title">订阅历史列表</h2></div>
+                        <div class="more-detail-content" scroll-refresh="subQry(bll.subParams.userId,bll.subParams.tenantId,5,bll.subParams.positionStr)">
+                            <div class="list-head">
+                                <span class="list-item w33">组合名称</span>
+                                <span class="list-item w33">投顾昵称</span>
+                                <span class="list-item w33">订阅日期</span>
+                            </div>
+                            <div class="list-content" scroll-refresh="subQry(bll.subParams.userId,bll.subParams.tenantId,5,bll.subParams.positionStr)">
+                                <ul>
+                                    <li ng-repeat="x in bll.subInfoList">
+                                        <!--<span class="list-item work-ellipsis w33">{{x.combiName}}</span>-->
+                                        <span class="list-item work-ellipsis w33 " title="{{x.combiName}}" ng-show="x.combiName.length>10">
+                                        {{x.combiName.substring(0,5)}}...{{x.combiName.substring(x.combiName.length-3,x.combiName.length)}}
+                                        </span>
+                                        <span class="list-item work-ellipsis w33" ng-show="x.combiName.length<=10">{{x.combiName}}</span>
+
+                                        <!--<span class="list-item w33" >{{x.adviserName}}</span>-->
+                                        <span class="list-item w33 " title="{{x.adviserName}}" ng-show="x.adviserName.length>10">
+                                        {{x.adviserName.substring(0,5)}}...{{x.adviserName.substring(x.adviserName.length-3,x.adviserName.length)}}
+                                        </span>
+                                        <span class="list-item w33" ng-show="x.adviserName.length<=10">{{x.adviserName}}</span>
+
+                                        <span class="list-item w33">{{x.subTime | formatStrToDate}}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--导出弹窗-->
+    <div class="common-module-modal more-detail-modal modal fade" id="exportExcelModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-center">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="iconfont icon icon-close"></i></button>
+                        <h4 class="modal-title">Excel导出</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="content-head"><h2 class="content-title">下载进度...{{bll.progress}}%</h2></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--优惠券使用弹窗-->
+    <!--<div class="common-module-modal more-detail-modal modal fade" id="couponModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-center">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="iconfont icon icon-close"></i></button>
+                        <h4 class="modal-title">优惠卷使用详情</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="content-head"><h2 class="content-title">优惠卷使用列表</h2></div>
+                        <div class="more-detail-content">
+                            <div class="list-head">
+                                <span class="list-item w50">优惠卷名称</span>
+                                <span class="list-item w50">使用日期</span>
+                            </div>
+                            <div class="list-content">
+                                <ul>
+                                    <li ng-repeat="x in bll.couponInfo">
+                                        <span class="list-item work-ellipsis w50">{{x.couponName}}</span>
+                                        <span class="list-item w50">{{x.useTime}}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>-->
+    <!--签约历史弹窗-->
+    <div class="common-module-modal more-detail-modal modal fade" id="signModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-center">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="iconfont icon icon-close"></i></button>
+                        <h4 class="modal-title">签约历史详情</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="content-head"><h2 class="content-title">签约历史列表</h2></div>
+                        <div class="more-detail-content" scroll-refresh="signQry(bll.signParams.userId,bll.signParams.tenantId,5,bll.signParams.positionStr)">
+                            <div class="list-head">
+                                <span class="list-item w50">订阅投顾</span>
+                                <span class="list-item w50">有效期</span>
+                            </div>
+                            <div class="list-content" scroll-refresh="signQry(bll.signParams.userId,bll.signParams.tenantId,5,bll.signParams.positionStr)">
+                                <ul>
+                                    <li ng-repeat="x in bll.signInfoList">
+                                        <!--<span class="list-item work-ellipsis w50">{{x.adviserName}}</span>-->
+                                        <span class="list-item work-ellipsis w33 " title="{{x.adviserName}}" ng-show="x.adviserName.length>10">
+                                        {{x.adviserName.substring(0,5)}}...{{x.adviserName.substring(x.adviserName.length-3,x.adviserName.length)}}
+                                        </span>
+                                        <span class="list-item work-ellipsis w33" ng-show="x.adviserName.length<=10">{{x.adviserName}}</span>
+
+                                        <span class="list-item w50">{{x.validTime | formatStrToDate}}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,111 @@
+<!-- uncomment the next line here and in xlsxworker.js for encoding support -->
+<!--<script src="dist/cpexcel.js"></script>-->
+<script type="text/javascript" src="scripts/lib/xlsx/shim.js"></script>
+<script type="text/javascript">
+    window.JSZip = require('jszip');
+</script>
+<script type="text/javascript" src="scripts/lib/xlsx/xlsx.js"></script>
+<script type="text/javascript" src="scripts/lib/xlsx/ods.js"></script>
+<script type="text/javascript" src="scripts/lib/xlsx/Export2Excel.js"></script>
+<!-- uncomment the next line here and in xlsxworker.js for ODS support -->
+<script type="text/javascript" src="scripts/lib/xlsx/xlsx-op.js"></script>
+<script type="text/javascript" src="scripts/lib/xlsx/Blob.js"></script>
+<script type="text/javascript" src="scripts/lib/xlsx/FileSaver.js"></script>
+<script type="text/javascript" src="scripts/lib/xlsx/swfobject.js"></script>
+<script type="text/javascript" src="scripts/lib/xlsx/downloadify.min.js"></script>
+<script type="text/javascript" src="scripts/lib/xlsx/base64.min.js"></script>
+
+
+<div  class="common-module-container add-new-consultant">
+    <div class="tab-content">
+        <h2 class="content-title">{{nowTitle}}</h2>
+        <div class="add-consultant-content">
+    <input type="text" size="20" name="upfile" id="upfile" style="border:1px dotted #ccc" readonly />
+    <button class="btn-primary-green" type="button" onclick="path.click()">导入</button>
+    <button class="btn-primary-green" type="button" ng-click="download('xlsx','新增投顾模板.xlsx')">下载Excel模板</button>
+    <!--<button class="btn-primary-green" type="button" onclick="export_table_to_excel('table','xlsx','新增投顾模板.xlsx')">下载Excel模板</button>-->
+    <input type="file" id="path" style="display:none" onchange="upfile.value=this.value" file-model = "myFile" />
+    <!--<input type="file" class="up_input"  file-model = "myFile" />-->
+    <!--<pre id="out"></pre>-->
+            <!--<table id="table" border="1">-->
+                <!--<tr><td>This</td><td>is</td><td>a</td><td>Test</td></tr>-->
+                <!--<tr><td>Fee</td><td>Fi</td><td>Fo</td><td>Fum</td></tr>-->
+                <!--<tr><td>Foo</td><td></td><td>Bar</td><td></td></tr>-->
+                <!--<tr><td></td><td>Baz</td><td>(unicode sushi) x1f363</td><td>Qux</td></tr>-->
+                <!--<tr><td>1</td><td>2</td><td>3</td><td>4</td></tr>-->
+            <!--</table>-->
+    <div class="modal-body">
+        <!--<div class="content-head"><h2 class="content-title">批量新增投顾列表</h2></div>-->
+        <div class="more-detail-content" scroll-refresh="" style="overflow-x: hidden;">
+            <div class="list-head" style="width: 9999px;">
+                <span class="list-item w10px">姓名</span>
+                <!--<span class="list-item w10">登录密码</span>-->
+                <span class="list-item w10px">身份证号</span>
+                <!--<span class="list-item w33">用户头像</span>-->
+                <!--<span class="list-item w10">微信公众号</span>-->
+                <!--<span class="list-item w10">从业年限</span>-->
+                <span class="list-item w10px">营业部</span>
+                <span class="list-item w10px">投顾类型</span>
+                <span class="list-item w10px">邮箱地址</span>
+                <span class="list-item w10px">用户昵称</span>
+                <span class="list-item w10px">手机号</span>
+                <span class="list-item w10px">租户ID</span>
+                <span class="list-item w10px">机构编码</span>
+                <!--<span class="list-item w33">注册来源</span>-->
+            </div>
+            <div id="listAdviser" class="list-content" style="height:185px; overflow-y:auto; overflow-x: hidden;">
+                <ul style="width: 9999px;">
+                    <li ng-repeat="x in bll.adviserInfoList" id="li{{$index}}">
+                        <!--<span class="list-item work-ellipsis w33">{{x.combiName}}</span>-->
+                        <span class="list-item w10px">{{x.applicantName}}</span>
+                        <!--<span class="list-item work-ellipsis w10px " title="{{x.applicantName}}" ng-show="GetLength(x.applicantName)>8">-->
+                        <!--{{x.applicantName.substring(0,2)}}...{{x.applicantName.substring(x.applicantName.length-2,x.applicantName.length)}}-->
+                        <!--</span>-->
+                        <span class="list-item w10px">{{x.idCardNo}}</span>
+                        <!--<span class="list-item work-ellipsis w10px " title="{{x.idCardNo}}" ng-show="GetLength(x.idCardNo)>8">-->
+                                <!--{{x.idCardNo.substring(0,2)}}...{{x.idCardNo.substring(x.idCardNo.length-2,x.idCardNo.length)}}-->
+                        <!--</span>-->
+                        <!--<span class="list-item work-ellipsis w33 " title="{{x.weixinNo}}" ng-show="x.weixinNo)>8">-->
+                                <!--{{x.weixinNo.substring(0,5)}}...{{x.weixinNo.substring(x.weixinNo.length-3,x.weixinNo.length)}}-->
+                        <!--</span>-->
+
+                        <!--<span class="list-item w33" >{{x.workYear}}</span>-->
+                        <span class="list-item w10px" >{{x.businessDept}}</span>
+                        <!--<span class="list-item w10px " title="{{x.businessDept}}" ng-show="GetLength(x.businessDept)>8">-->
+                        <!--{{x.businessDept.substring(0,2)}}...{{x.businessDept.substring(x.businessDept.length-2,x.businessDept.length)}}-->
+                        <!--</span>-->
+                        <span class="list-item w10px">
+                            {{x.adviserType == 0?'专职投顾':x.adviserType==1?'普通投顾':x.adviserType==2?'理财投顾':''}}</span>
+                        <span class="list-item w10px" >{{x.email}}</span>
+                        <!--<span class="list-item w10px " title="{{x.email}}" ng-show="GetLength(x.email)>8">-->
+                        <!--{{x.email.substring(0,2)}}...{{x.email.substring(x.email.length-2,x.email.length)}}-->
+                        <!--</span>-->
+                        <span class="list-item w10px">{{x.aliasName}}</span>
+                        <!--<span class="list-item w10px " title="{{x.aliasName}}" ng-show="GetLength(x.aliasName)>8">-->
+                        <!--{{x.aliasName.substring(0,2)}}...{{x.aliasName.substring(x.aliasName.length-2,x.aliasName.length)}}-->
+                        <!--</span>-->
+                        <span class="list-item w10px" >{{x.mobile}}</span>
+                        <!--<span class="list-item w10px " title="{{x.mobile}}" ng-show="GetLength(x.mobile)>8">-->
+                        <!--{{x.mobile.substring(0,2)}}...{{x.mobile.substring(x.mobile.length-2,x.mobile.length)}}-->
+                        <!--</span>-->
+                        <span class="list-item w10px" >{{x.tenantId}}</span>
+                        <!--<span class="list-item w10px " title="{{x.tenantId}}" ng-show="GetLength(x.tenantId)>8">-->
+                        <!--{{x.tenantId.substring(0,2)}}...{{x.tenantId.substring(x.tenantId.length-2,x.tenantId.length)}}-->
+                        <!--</span>-->
+                        <span class="list-item w10px" >{{x.branchNo}}</span>
+                        <!--<span class="list-item w10px " title="{{x.branchNo}}" ng-show="GetLength(x.branchNo)>8">-->
+                        <!--{{x.branchNo.substring(0,2)}}...{{x.branchNo.substring(x.branchNo.length-2,x.branchNo.length)}}-->
+                        <!--</span>-->
+                        <!--<span class="list-item w33">{{x.subTime | formatStrToDate}}</span>-->
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="btn-box">
+        <a class="btn-primary-gray" href="#/broker">返回</a>
+        <button class="btn-primary-green" type="button" ng-click="saveInvestInfo()">批量保存</button>
+    </div>
+</div>
+</div>
+</div>

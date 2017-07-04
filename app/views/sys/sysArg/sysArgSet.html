@@ -1,0 +1,44 @@
+<div ng-controller="sysArgSetCtrl" class="bgContainer">
+    <div class="row">
+        <div class="panel">
+            <div class="panel-body">
+                <form role="form" class="form-horizontal" style="padding-top: 30px">
+                    <!--<span class="pull-left form-header-left"></span><span class="form-span">公共参数设置</span>-->
+                    <div class="form-group">
+                    <label class="col-sm-1  control-label res-control-label text-dis">系统日期：</label>
+                    <div class="col-sm-4 role-set-label">
+                        <label>{{bll.Set.what.params.init_date | formatToDateChina}}</label>
+                    </div>
+                </div>
+                    <div class="form-group">
+                        <label class="col-sm-1  control-label res-control-label text-dis">系统状态：</label>
+                        <div class="col-sm-4">
+                            <select id="sysStatus" class="form-control input-sm "
+                                    ng-model="bll.Set.what.params.sys_status"
+                                    ng-options="o.code as (o.code+'-'+o.value) for o in bll.dicts.sysStatus">
+                            </select>
+                        </div>
+                        <label class="col-sm-1 control-label res-control-label text-dis">系统名称：</label>
+                        <div class="col-sm-4">
+                            <input id="systemName" type="text" class="form-control input-sm "
+                                   ng-model="bll.Set.what.params.system_name">
+                        </div>
+                        <!--<label class="col-sm-1 control-label res-control-label text-dis">系统域名：</label>-->
+                        <!--<div class="col-sm-2">-->
+                            <!--<input id="sysDomain" type="text" class="form-control input-sm "-->
+                                   <!--ng-model="bll.Set.what.params.sys_domain">-->
+                        <!--</div>-->
+                        <div class="col-sm-2 res-sysarg-padding">
+                            <a class="query-button pull-right" type="submit"
+                               ng-click="sub()">
+                                保 存
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+

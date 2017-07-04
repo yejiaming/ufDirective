@@ -1,0 +1,213 @@
+<div class="common-module-container add-new-consultant">
+    <div class="tab-content">
+        <h2 class="content-title">{{nowTitle}}</h2>
+        <div class="add-consultant-content">
+            <form method="post" class="form-content">
+                <fieldset>
+                    <legend class="form-title">个人基本信息</legend>
+                    <div class="form-content">
+                        <div class="form-group">
+                            <label class="form-label" for="personal_0"><em class="required-item">*</em>申请人姓名：</label>
+                            <input maxlength="10" ng-blur="NotEmpty($event)" class="form-input keyInput" type="text" id="personal_0" ng-model="finalResultChange.applicantName" value="{{finalResultChange.applicantName}}">
+                            <p class="error-tip">请输入正确的名字</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="personal_1"><em class="required-item">*</em>身份证号码：</label>
+                            <input maxlength="18" ng-blur="IDCardChange()"  class="form-input keyInput" type="text" id="personal_1" ng-model="finalResultChange.idCardNo" value="{{finalResultChange.idCardNo}}">
+                            <p class="error-tip">请输入正确的身份证号码</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="personal_2">微博号：</label>
+                            <input maxlength="15"  class="form-input" type="text" id="personal_2" ng-model="finalResultChange.weiboNo" value="{{finalResultChange.weiboNo}}">
+                            <p class="error-tip">请输入正确的微博号</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="personal_7">微信账户主体：</label>
+                            <select class="form-input" id="personal_7" name="consultant_type" ng-model="finalResultChange.weixinOwner">
+                                <option value="0">个体</option>
+                                <option value="1">企业</option>
+                            </select>
+                            <!--<input  class="form-input" type="text" id="personal_7" ng-model="finalResultChange.weixinOwner" value="{{finalResultChange.weixinOwner}}">-->
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="personal_4"><em class="required-item">*</em>微信公众号：</label>
+                            <input maxlength="15" ng-blur="NotEmpty($event)" class="form-input keyInput" type="text" id="personal_4" ng-model="finalResultChange.weixinNo" value="{{finalResultChange.weixinNo}}">
+                            <p class="error-tip">请输入微信公众号</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="personal_5">QQ号：</label>
+                            <input maxlength="15" ng-blur="onlyNumChange()" class="form-input" type="text" id="personal_5" ng-model="finalResultChange.qqNo" value="{{finalResultChange.qqNo}}">
+                            <p class="error-tip">请输入正确的QQ号</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="personal_8"><em class="required-item">*</em>用户昵称：</label>
+                            <!--<label class="form-label" for="personal_8">用户昵称：</label>-->
+                            <input maxlength="10" ng-blur="onlyAliasChange()" ng-change="onlyAliasChange()" class="form-input keyInput" type="text" id="personal_8" ng-model="finalResultChange.aliasName" value="{{finalResultChange.aliasName}}">
+                            <p class="error-tip">请输入昵称</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="personal_9"><em class="required-item">*</em>手机号：</label>
+                            <input maxlength="11" ng-blur="mobileChange()" class="form-input keyInput" type="text" id="personal_9"  ng-model="finalResultChange.mobile" value="{{finalResultChange.mobile}}">
+                            <p class="error-tip">请输入正确的手机号</p>
+                        </div>
+                        <div class="form-group {{hidePassword}}" >
+                            <label class="form-label" for="personal_3"><em class="required-item">*</em>请输入密码：</label>
+                            <input maxlength="16" class="form-input keyInput" ng-blur="passwordChange()" type="password" id="personal_3" ng-model="finalResultChange.authPasswordText">
+                            <p class="error-tip">密码限制6-16位数字字母组合</p>
+                        </div>
+                        <div class="form-group {{hidePassword}}">
+                            <label class="form-label" for="personal_6"><em class="required-item">*</em>重新输入密码：</label>
+                            <input maxlength="16" class="form-input keyInput" ng-blur="passwordCopyChange()" type="password" id="personal_6" >
+                            <span class="error-tip">两次输入密码不一样</span>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend class="form-title">资质信息</legend>
+                    <div class="form-group">
+                        <label class="form-label" for="qualification_0"><em class="required-item">*</em>投顾类型：</label>
+                        <select class="form-input" id="qualification_0" name="consultant_type" ng-model="finalResultChange.adviserType" ng-change="adviserTypeChange()">
+                            <option value="0" selected="selected">专职投顾</option>
+                            <option value="1">普通投顾</option>
+                            <option value="2">理财投顾</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="qualification_1" ng-bind-html="stateElement.html_qualification_1">资格证书号：</label>
+                        <input maxlength="20" ng-blur="NotEmpty($event)" class="form-input" type="text" id="qualification_1"  ng-model="finalResultChange.credentialsNo" value="{{finalResultChange.credentialsNo}}">
+                        <span class="error-tip">专职投顾需要输入资格证书号</span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="qualification_2" ng-bind-html="stateElement.html_qualification_2">资格证书类型：</label>
+                        <input maxlength="10" ng-blur="NotEmpty($event)" class="form-input" type="text" id="qualification_2"  ng-model="finalResultChange.credentialsType" value="{{finalResultChange.credentialsType}}">
+                        <span class="error-tip">专职投顾需要输入资格证书类型</span>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend class="form-title">公司信息</legend>
+                    <div class="form-content">
+                        <div class="form-group">
+                            <label class="form-label" for="company_0">公司名称：</label>
+                            <input maxlength="30"  class="form-input" type="text" id="company_0" ng-model="finalResultChange.companyName" value="{{finalResultChange.companyName}}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="company_1">所在省：</label>
+                            <input maxlength="4" class="form-input" type="text" id="company_1" ng-blur="provinceChange(1)" ng-model="finalResultChange.provinceName" value="{{finalResultChange.provinceName}}">
+                            <span class="error-tip">省名称只能为中文</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="company_12">推荐码：</label>
+                            <input  maxlength="20" ng-blur="referralCodeChange()" class="form-input" type="text" id="company_12" ng-model="finalResultChange.referralCode" value="{{finalResultChange.referralCode}}">
+                            <p class="error-tip">推荐码只能为全数字</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="company_3">员工编号：</label>
+                            <input maxlength="20"  class="form-input" type="text" id="company_3" ng-model="finalResultChange.employeeNo" value="{{finalResultChange.employeeNo}}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="company_4">所在市：</label>
+                            <input maxlength="16"  class="form-input" type="text" id="company_4" ng-blur="provinceChange(2)" ng-model="finalResultChange.cityName" value="{{finalResultChange.cityName}}">
+                            <span class="error-tip">市名称只能为中文</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="company_5">银行账号：</label>
+                            <input maxlength="19" class="form-input" type="text" id="company_5" ng-blur="bankAccountChange()"  ng-model="finalResultChange.bankAccount" value="{{finalResultChange.bankAccount}}">
+                            <span class="error-tip">银行账户只能为全数字</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="company_6"><em class="required-item">*</em>从业年限：</label>
+                            <input maxlength="2" ng-blur="workYearChange()" class="form-input keyInput" type="text" id="company_6" ng-model="finalResultChange.workYear" value="{{finalResultChange.workYear}}">
+                            <p class="error-tip">请输入正确的从业年限</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="company_7">所属机构：</label>
+                            <input maxlength="20" class="form-input" type="text" id="company_7" ng-model="finalResultChange.organization" value="{{finalResultChange.organization}}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="company_8"><em class="required-item">*</em>邮箱地址：</label>
+                            <input maxlength="20" ng-blur="emailChange()" class="form-input keyInput" type="text" id="company_8" ng-model="finalResultChange.email" value="{{finalResultChange.email}}">
+                            <p class="error-tip">请输入正确的邮箱地址</p>
+                        </div>
+                        <!--<div class="form-group">
+                            <label class="form-label" for="company_2">租户ID：</label>
+                            <input maxlength="20" class="form-input" type="text" id="company_2" ng-model="finalResultChange.tenantId" value="{{finalResultChange.tenantId}}" readonly>
+                            <p class="tips">建议使用默认值</p>
+                        </div>-->
+                        <!--<div class="form-group">-->
+                            <!--<label class="form-label" for="company_12">推荐码：</label>-->
+                            <!--<input  maxlength="20" ng-blur="referralCodeChange()" class="form-input" type="text" id="company_12" ng-model="finalResultChange.referralCode" value="{{finalResultChange.referralCode}}">-->
+                            <!--<p class="error-tip">请输入正确的公司名称</p>-->
+                        <!--</div>-->
+                        <div class="form-group">
+                            <label class="form-label" for="company_10">开户人：</label>
+                            <input  maxlength="10" class="form-input" type="text" id="company_10" ng-model="finalResultChange.accountHolder" value="{{finalResultChange.accountHolder}}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="company_11">开户行：</label>
+                            <input  maxlength="30" class="form-input" type="text" id="company_11" ng-model="finalResultChange.openingBank" value="{{finalResultChange.openingBank}}">
+                            <p class="error-tip">请输入正确的公司名称</p>
+                        </div>
+                        <!--<div class="form-group">-->
+                            <!--<label class="form-label" for="company_2">租户ID：</label>-->
+                            <!--<input maxlength="20" class="form-input" type="text" id="company_2" ng-model="finalResultChange.tenantId" value="{{finalResultChange.tenantId}}">-->
+                            <!--<p class="tips">建议使用默认值</p>-->
+                        <!--</div>-->
+                        <!--<div class="bg-container">-->
+                        <div class="row">
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-5">
+                            <div class="res-tree-title">
+                            <label class="form-label" for="company_14" style="margin-bottom: 0;font-weight: 100;font-size: 14px;line-height: 34px;text-align: right;color: #666;"><em class="form-group.required-item" style="margin-right: 4px;font-style: normal;font-size: 14px;line-height: 20px;color: #f00;">*</em>租户：</label>
+                            <input maxlength="20" class="form-input keyInput" type="text" id="company_14" ng-model="finalResultChange.tenantId" value="{{finalResultChange.tenantId}}" readonly>
+                            </div>
+                            <div class="res-tree-content" style="height:360px;">
+                                <right-tree is-right-tree="false" tree-data="bll.result" id="branchNo"
+                                            is-change="true" display-node="displayNode" show-level="1" children="children"
+                                            text-field="branchNo,branchName" item-clicked="bll.getItemClicked(item)">
+                                </right-tree>
+                            </div>
+                        </div>
+                        <div class="col-sm-5">
+                            <div class="res-tree-title ">
+                            <label class="form-label" for="company_13"  style="margin-bottom: 0;font-weight: 100;font-size: 14px;line-height: 34px;text-align: right;color: #666;"><em class="form-group.required-item" style="margin-right: 4px;font-style: normal;font-size: 14px;line-height: 20px;color: #f00;">*</em>营业部：</label>
+                            <input maxlength="20" class="form-input keyInput" type="text" id="company_13" ng-model="finalResultChange.branchNo" value="{{finalResultChange.branchNo}}" readonly>
+                             </div>
+                            <div class="res-tree-content" style="height:360px;">
+                                <right-tree is-right-tree="false" tree-data="bll.result2" id="branchNo"
+                                            is-change="true" display-node="displayNode" show-level="1" children="children"
+                                            text-field="branchNo,branchName" item-clicked="bll.getItemClicked2(item)">
+                                </right-tree>
+                            </div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                        </div>
+                        <!--</div>-->
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend class="form-title">其他信息</legend>
+                    <div class="form-group">
+                        <label class="form-label" for="other_1">投资风格：</label>
+                        <input  maxlength="8" class="form-input" type="text" id="other_1" ng-model="finalResultChange.investmentStyle" value="{{finalResultChange.investmentStyle}}">
+                    </div>
+                    <div class="form-textarea">
+                        <label class="textarea-label" for="other_2">投资策略：</label>
+                        <textarea maxlength="150" class="textarea-input" id="other_2" ng-model="finalResultChange.investmentStrategy">{{finalResultChange.investmentStrategy}}</textarea>
+                    </div>
+                    <div class="form-textarea">
+                        <label class="textarea-label" for="other_3">投资策略简述：</label>
+                        <textarea maxlength="150" class="textarea-input" id="other_3" ng-model="finalResultChange.investmentStrategySummary">{{finalResultChange.investmentStrategySummary}}</textarea>
+                    </div>
+                    <div class="form-textarea">
+                        <label class="textarea-label" for="other_0">背景介绍：</label>
+                        <textarea maxlength="50" class="textarea-input" id="other_0" ng-model="finalResultChange.backgroundIntro">{{finalResultChange.backgroundIntro}}</textarea>
+                    </div>
+                </fieldset>
+            </form>
+            <div class="btn-box">
+                <a class="btn-primary-gray" href="#/broker">返回</a>
+                <button class="btn-primary-green" type="button" ng-click="saveInvestInfo()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,198 @@
+<div ng-controller="operLogQryCtrl" class="bgContainer operation page-operlog">
+    <div class="row">
+        <!--<div class="top-line"></div>-->
+        <div class="panel-body border-reset">
+            <form role="form" class="form-horizontal" name="operLogQryForm" novalidate>
+                <div class="form-group">
+                    <div class="col-sm-4 col-margin">
+                        <label class="col-sm-4 control-label">机构编码：</label>
+                        <!--<div class="col-sm-8">-->
+                            <!--<st-combobox dataSource="dataMultis"-->
+                                         <!--itemChange="itemCheckHandler"-->
+                                         <!--multiselect="true"-->
+                                         <!--watermark="多选"-->
+                                         <!--editable="false"-->
+                                         <!--enable="{{enable}}">-->
+                            <!--</st-combobox>-->
+                        <!--</div>-->
+                        <div class="col-sm-8">
+                            <select class="form-control input-sm" ng-model="bll.qryParams.branchNo"
+                                    ng-options="o.branchNo as (o.branchNo+'&nbsp;&nbsp;&nbsp;&nbsp;'+o.branchName) for o in bll.branchInfo">
+                                <option value="">--请选择--</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 ">
+                        <label class="col-sm-4  control-label ">操作员编号：</label>
+                        <div class="col-sm-8 ">
+                            <input name="operator_no" type="text" class="form-control input-sm"
+                                   placeholder="请输入..."
+                                   ng-model="bll.qryParams.operatorNo" ng-focus="true" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-4 col-margin">
+                        <label class="col-sm-4 control-label">开始日期：</label>
+                        <div class="col-sm-8 ">
+                            <input name="begin_date" class="form-control input-sm"
+                                   placeholder="请输入..."
+                                   uib-datepicker-popup
+                                   ng-model="bll.beginDate_t" is-open="popup.opened" readonly="true"
+                                   datepicker-options="dateOptions" ng-required="true" close-text="Close">
+                            <i class="iconfont icon-riqi riqi" ng-click="open()"></i>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 ">
+                        <label class="col-sm-4  control-label">结束日期：</label>
+                        <div class="col-sm-8 ">
+                            <input name="endDate" class="form-control input-sm" readonly="true"
+                                   placeholder="请输入..."
+                                   uib-datepicker-popup
+                                   ng-model="bll.endDate_t" is-open="popup1.opened"
+                                   datepicker-options="dateOptions" ng-required="true" close-text="Close">
+                            <i class="iconfont icon-riqi riqi" ng-click="open1()"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-4 col-margin">
+                        <label class="col-sm-4 control-label ">开始时间：</label>
+                        <div class="col-sm-8">
+                            <input name="begin_time" type="time" class="form-control input-sm"
+                                   placeholder="请输入..."
+                                   ng-model="bll.beginTime_t" ng-focus="true" required>
+                            <!--<i class="iconfont icon-shijian1 shijian1" ng-click="updateBgnTime()"></i>-->
+                        </div>
+                    </div>
+                    <div class="col-sm-4 ">
+                        <label class="col-sm-4  control-label">结束时间：</label>
+                        <div class="col-sm-8 ">
+                            <input name="end_time" type="time" class="form-control input-sm"
+                                   placeholder="请输入..."
+                                   ng-model="bll.endTime_t" ng-focus="true" required>
+                            <!--<i class="iconfont icon-shijian1 shijian1" ng-click="updateEndTime()"></i>-->
+                        </div>
+                    </div>
+                    <!--<div class="col-sm-4 col-margin">
+                        <label class="col-sm-3"></label>
+                        <div class="col-sm-3">
+
+                        </div>
+                    </div>-->
+                    <div class="operlog-search">
+                        <!--<label class="col-sm-3"></label>-->
+                        <div class="col-sm-3">
+                            <a type="submit" ng-click="search()"
+                               class="query-button">查 询
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="row role-set-div role-set-deal">
+            <div class="col-sm-12">
+                <div class="form-title">
+                    <span class="pull-left form-header-left"></span><span
+                        class="pull-left form-header-right">操作员日志列表</span> <span class="operLog-count">总记录数：</span><span ng-bind="bll.result.length>0 ? bll.result[0].rowCount:0"></span></div>
+                <table class="table table-margin">
+                    <tr class="table-header">
+                        <th>发生日期</th>
+                        <th>发生时间</th>
+                        <th>流水序号</th>
+                        <th>操作员编号</th>
+                        <th>机构编码</th>
+                        <th>页面操作</th>
+                        <th>备注</th>
+                    </tr>
+                    <tr class="hover-change" title="双击查看详细信息" ng-repeat="x in bll.result" change-tr-style
+                        ng-dblclick="ui.modal.open_mod($index, null, null,'详细信息')">
+                        <td ng-cloak>{{ x.sysDate | formatStrToDate}}</td>
+                        <td ng-cloak>{{ x.sysTime | formatStrToTime }}</td>
+                        <td ng-cloak>{{ x.serialNo }}</td>
+                        <td ng-cloak>{{ x.operatorNo }}</td>
+                        <td ng-cloak class="mechanism-coding">{{ x.branchName }}</td>
+                        <td ng-cloak class="page-operation">{{ x.interfaceName }}</td>
+                        <td ng-cloak class="remark" title="{{ x.remark }}">{{ x.remark }}</td>
+                    </tr>
+                </table>
+                <small ng-if="!bll.result.length>0">暂无数据</small>
+                <div class="text-right">
+                    <uib-pagination total-items="bll.result[0].rowCount" previous-text="上一页"
+                                    items-per-page="bll.qryParams.pageSize" next-text="下一页"
+                                    ng-model="bll.qryParams.pageNo"
+                                    max-size="5" class="pagination-sm"
+                                    ng-change="pageChanged(bll.qryParams.pageNo)"
+                                    boundary-link-numbers="true" rotate="false"></uib-pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--修改-->
+<script type="text/ng-template" id="mod.html">
+    <div class="favorPop sysPop operLog-details">
+        <div class="popTab">
+            <span class="tabTitle">{{ui.modalTitle}}</span> <i class="iconfont icon-2 pull-right"
+                                                               ng-click="ui.cancel()"></i>
+        </div>
+        <form role="form" class="form-horizontal" name="operLogForm" novalidate>
+            <div class="form-group margin-form-group">
+                <label class="col-sm-3 control-label res-padding-top"><span class="red">*</span>发生日期：</label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control input-sm res-input-sm" name="sysDate"
+                           ng-readonly="true" placeholder="请输入..." dateformat-filter={{ui.modalData.sysDate}} required>
+                </div>
+                <label class="col-sm-3 control-label res-padding-top"><span class="red">*</span>发生时间：</label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control input-sm res-input-sm" name="sysTime"
+                           ng-readonly="true" placeholder="请输入..."
+                           time-filter={{ui.modalData.sysTime}} required>
+                </div>
+            </div>
+            <div class="form-group margin-form-group">
+                <label class="col-sm-3 control-label res-padding-top"><span class="red">*</span>流水序号：</label>
+                <div class="col-sm-3">
+                    <!--<span class="dialog-span" ng-model="ui.modalData.serialNo">-->
+                        <!--{{ ui.modalData.serialNo }}-->
+                    <!--</span>-->
+                    <input type="text" class="form-control input-sm res-input-sm" name="serialNo"
+                           ng-readonly="true" placeholder="请输入..."
+                           ng-model="ui.modalData.serialNo" ng-focus="true" required>
+                </div>
+                <label class="col-sm-3 control-label res-padding-top"><span class="red">*</span>操作员编号：</label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control input-sm res-input-sm" name="operatorNo"
+                           ng-readonly="true" placeholder="请输入..."
+                           ng-model="ui.modalData.operatorNo" ng-focus="true" required>
+                </div>
+            </div>
+            <div class="form-group margin-form-group">
+                <label class="col-sm-3 control-label res-padding-top"><span class="red">*</span>机构编码：</label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control input-sm res-input-sm" name="branchName"
+                           ng-readonly="true" placeholder="请输入..."
+                           ng-model="ui.modalData.branchName" ng-focus="true" required>
+                </div>
+                <label class="col-sm-3 control-label res-padding-top"><span class="red">*</span>页面操作：</label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control input-sm res-input-sm" name="interfaceName"
+                           ng-readonly="true"
+                           ng-model="ui.modalData.interfaceName" ng-focus="true" required>
+                </div>
+            </div>
+            <div class="form-group margin-form-group">
+                <label class="col-sm-3 control-label res-padding-top"><span class="red">*</span>备注：</label>
+                <div class="col-sm-9">
+                    <textarea type="text" ng-readonly="true" class="form-control input-sm res-input-sm operLog-remark"
+                              placeholder="" ng-model="ui.modalData.remark" />
+                </div>
+            </div>
+            <a class="query-button dialog-modal" type="submit" ng-click="ui.cancel()">
+                <span>关闭</span>
+            </a>
+        </form>
+    </div>
+</script>
